@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Assignment 01</string>
+    <string name="itemListPrice">Enter List Price</string>
+    <string name="itemPrice">Item Price:</string>
+    <string name="sale">Sale %</string>
+    <string name="ten">10%</string>
+    <string name="fifteen">15%</string>
+    <string name="eighteen">18%</string>
+    <string name="custom">Custom</string>
+    <string name="customPercent">Custom %:</string>
+    <string name="twentyfive">25%</string>
+    <string name="discount">Discount: </string>
+    <string name="finalPrice">"Final Price: "</string>
+    <string name="reset">Reset</string>
+    <string name="calculate">Calculate</string>
+    <string name="discountAmount">0.00</string>
+    <string name="finalPriceAmount">0.00</string> <string name="title">Discount Calculator</string>
+</resources>

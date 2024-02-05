@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/priceAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="275dp"
+        android:layout_marginBottom="356dp"
+        android:text="@string/finalPriceAmount"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/discountAmount" />
+
+    <TextView
+        android:id="@+id/discountCalculator"
+        android:layout_width="124dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="145dp"
+        android:text="@string/title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.78"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginBottom="260dp"
+        android:text="@string/reset"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        style="@android:style/Widget.Material.Light.SeekBar"
+        android:layout_width="285dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="54dp"
+        android:layout_marginBottom="45dp"
+        android:max="50"
+        android:progress="25"
+        app:layout_constraintBottom_toTopOf="@+id/discountAmount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/customPercent"
+        app:layout_constraintTop_toBottomOf="@+id/saleGroup" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/enterItemPrice"
+        android:layout_width="315dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="45dp"
+        android:hint="@string/itemListPrice"
+        app:layout_constraintBottom_toTopOf="@+id/saleGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/saleGroup"
+        android:layout_width="315dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="45dp"
+        android:checkedButton="@id/tenPercent"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enterItemPrice">
+
+        <RadioButton
+            android:id="@+id/tenPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ten" />
+
+        <RadioButton
+            android:id="@+id/fifteenPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/fifteen" />
+
+        <RadioButton
+            android:id="@+id/eighteenPercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/eighteen" />
+
+        <RadioButton
+            android:id="@+id/custom"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/custom" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/discountAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="275dp"
+        android:layout_marginBottom="35dp"
+        android:text="@string/discountAmount"
+        app:layout_constraintBottom_toTopOf="@+id/priceAmount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
+    <TextView
+        android:id="@+id/itemPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="@string/itemPrice"
+        app:layout_constraintBottom_toBottomOf="@+id/enterItemPrice"
+        app:layout_constraintEnd_toStartOf="@+id/enterItemPrice"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/enterItemPrice" />
+
+    <TextView
+        android:id="@+id/salePercent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="@string/sale"
+        app:layout_constraintBottom_toBottomOf="@+id/saleGroup"
+        app:layout_constraintEnd_toStartOf="@+id/saleGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/saleGroup" />
+
+    <TextView
+        android:id="@+id/customPercent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginEnd="6dp"
+        android:text="@string/customPercent"
+        app:layout_constraintBottom_toBottomOf="@+id/seekBar"
+        app:layout_constraintEnd_toStartOf="@+id/seekBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/seekBar" />
+
+    <TextView
+        android:id="@+id/progressPercent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:text="@string/twentyfive"
+        app:layout_constraintBottom_toBottomOf="@+id/seekBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/seekBar"
+        app:layout_constraintTop_toTopOf="@+id/seekBar" />
+
+    <TextView
+        android:id="@+id/discount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="@string/discount"
+        app:layout_constraintBottom_toBottomOf="@+id/discountAmount"
+        app:layout_constraintEnd_toStartOf="@+id/discountAmount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/discountAmount" />
+
+    <TextView
+        android:id="@+id/finalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="@string/finalPrice"
+        app:layout_constraintBottom_toBottomOf="@+id/priceAmount"
+        app:layout_constraintEnd_toStartOf="@+id/priceAmount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/priceAmount" />
+
+    <Button
+        android:id="@+id/calculate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="260dp"
+        android:text="@string/calculate"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
