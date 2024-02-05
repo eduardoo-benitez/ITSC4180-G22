@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileActivity">
+
+    <TextView
+        android:id="@+id/profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="151dp"
+        android:text="Profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="100dp"
+        android:text="@string/name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profileEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileName" />
+
+    <TextView
+        android:id="@+id/profileRole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/role"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileEmail" />
+
+    <TextView
+        android:id="@+id/profileIncome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/income"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileRole" />
+
+    <TextView
+        android:id="@+id/profileEducation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/education"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileIncome" />
+
+    <TextView
+        android:id="@+id/profileMaritalStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/maritalStatus"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileEducation" />
+
+    <TextView
+        android:id="@+id/profileLivingStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/livingStatus"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileMaritalStatus" />
+
+    <TextView
+        android:id="@+id/nameResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="@string/none"
+        app:layout_constraintBottom_toBottomOf="@+id/profileName"
+        app:layout_constraintStart_toEndOf="@+id/profileName"
+        app:layout_constraintTop_toTopOf="@+id/profileName" />
+
+    <TextView
+        android:id="@+id/emailResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="@string/none"
+        app:layout_constraintBottom_toBottomOf="@+id/profileEmail"
+        app:layout_constraintStart_toEndOf="@+id/profileEmail"
+        app:layout_constraintTop_toTopOf="@+id/profileEmail" />
+
+    <TextView
+        android:id="@+id/roleResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="@string/none"
+        app:layout_constraintBottom_toBottomOf="@+id/profileRole"
+        app:layout_constraintStart_toEndOf="@+id/profileRole"
+        app:layout_constraintTop_toTopOf="@+id/profileRole" />
+
+    <TextView
+        android:id="@+id/incomeResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="@string/none"
+        app:layout_constraintBottom_toBottomOf="@+id/profileIncome"
+        app:layout_constraintStart_toEndOf="@+id/profileIncome"
+        app:layout_constraintTop_toTopOf="@+id/profileIncome" />
+
+    <TextView
+        android:id="@+id/educationResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="@string/none"
+        app:layout_constraintBottom_toBottomOf="@+id/profileEducation"
+        app:layout_constraintStart_toEndOf="@+id/profileEducation"
+        app:layout_constraintTop_toTopOf="@+id/profileEducation" />
+
+    <TextView
+        android:id="@+id/maritalStatusResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="@string/none"
+        app:layout_constraintBottom_toBottomOf="@+id/profileMaritalStatus"
+        app:layout_constraintStart_toEndOf="@+id/profileMaritalStatus"
+        app:layout_constraintTop_toTopOf="@+id/profileMaritalStatus" />
+
+    <TextView
+        android:id="@+id/livingStatusResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="@string/none"
+        app:layout_constraintBottom_toBottomOf="@+id/profileLivingStatus"
+        app:layout_constraintStart_toEndOf="@+id/profileLivingStatus"
+        app:layout_constraintTop_toTopOf="@+id/profileLivingStatus" />
+</androidx.constraintlayout.widget.ConstraintLayout>

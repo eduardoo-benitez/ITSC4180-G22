@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EducationActivity">
+
+    <TextView
+        android:id="@+id/incomeDesc"
+        android:layout_width="296dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="58dp"
+        android:text="@string/incomeDesc"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectHouseholdIncome" />
+
+    <TextView
+        android:id="@+id/selectHouseholdIncome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="151dp"
+        android:text="@string/selectHouseholdIncome"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/householdBar"
+        android:layout_width="384dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="25dp"
+        android:max="4"
+        android:progress="0"
+        app:layout_constraintEnd_toEndOf="@+id/incomeDesc"
+        app:layout_constraintStart_toStartOf="@+id/incomeDesc"
+        app:layout_constraintTop_toBottomOf="@+id/incomeDesc" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginBottom="50dp"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="50dp"
+        android:text="@string/submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

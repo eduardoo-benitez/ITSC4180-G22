@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EducationActivity">
+
+    <TextView
+        android:id="@+id/selectEducationLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="151dp"
+        android:text="@string/selectEducationLevel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/educationLevelDesc"
+        android:layout_width="296dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="58dp"
+        android:text="@string/educationLevelDesc"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectEducationLevel"
+        tools:text="What is the highest degree or level or education you have completed?" />
+
+    <RadioGroup
+        android:id="@+id/educationGroup"
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/educationLevelDesc">
+
+        <RadioButton
+            android:id="@+id/belowHighSchool"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/belowHighSchool" />
+
+        <RadioButton
+            android:id="@+id/highSchool"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/highSchool" />
+
+        <RadioButton
+            android:id="@+id/bachelorsDegree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bachelorsDegree" />
+
+        <RadioButton
+            android:id="@+id/mastersDegree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mastersDegree" />
+
+        <RadioButton
+            android:id="@+id/phdOrHigher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/phdOrHigher" />
+
+        <RadioButton
+            android:id="@+id/tradeSchool"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tradeSchool" />
+
+        <RadioButton
+            android:id="@+id/preferNotToSay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/preferNotToSay" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginBottom="50dp"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="50dp"
+        android:text="@string/submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

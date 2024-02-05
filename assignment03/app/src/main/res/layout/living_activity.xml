@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EducationActivity">
+
+    <TextView
+        android:id="@+id/selectMaritalStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="151dp"
+        android:text="@string/selectLivingStatus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/maritalStatusDesc"
+        android:layout_width="296dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="58dp"
+        android:text="@string/livingStatusDesc"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectMaritalStatus" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginBottom="50dp"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="50dp"
+        android:text="@string/submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/livingGroup"
+        android:layout_width="310dp"
+        android:layout_height="387dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/maritalStatusDesc">
+
+        <RadioButton
+            android:id="@+id/homeowner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/homeowner" />
+
+        <RadioButton
+            android:id="@+id/reneter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/renter" />
+
+        <RadioButton
+            android:id="@+id/lessee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lessee" />
+
+        <RadioButton
+            android:id="@+id/other"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/other" />
+
+        <RadioButton
+            android:id="@+id/preferNotToSay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/preferNotToSay" />
+    </RadioGroup>
+</androidx.constraintlayout.widget.ConstraintLayout>

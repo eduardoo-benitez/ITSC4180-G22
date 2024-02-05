@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainConstraint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".IdentificationActivity">
+
+    <TextView
+        android:id="@+id/identificationInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="151dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="151dp"
+        android:text="@string/identificationInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/nameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="5dp"
+        android:text="@string/name"
+        app:layout_constraintBottom_toBottomOf="@+id/enterName"
+        app:layout_constraintEnd_toStartOf="@+id/enterName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/enterName" />
+
+    <TextView
+        android:id="@+id/emailTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="5dp"
+        android:text="@string/email"
+        app:layout_constraintBottom_toBottomOf="@+id/enterEmail"
+        app:layout_constraintEnd_toStartOf="@+id/enterEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/enterEmail" />
+
+    <TextView
+        android:id="@+id/roleTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="5dp"
+        android:text="@string/role"
+        app:layout_constraintBottom_toBottomOf="@+id/roleGroup"
+        app:layout_constraintEnd_toStartOf="@+id/roleGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/roleGroup" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/enterName"
+        android:layout_width="290dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="50dp"
+        android:hint="@string/enterName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/nameTitle"
+        app:layout_constraintTop_toBottomOf="@+id/identificationInfo" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/enterEmail"
+        android:layout_width="290dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="50dp"
+        android:hint="@string/enterEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/emailTitle"
+        app:layout_constraintTop_toBottomOf="@+id/enterName" />
+
+    <RadioGroup
+        android:id="@+id/roleGroup"
+        android:layout_width="127dp"
+        android:layout_height="143dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toEndOf="@+id/roleTitle"
+        app:layout_constraintTop_toBottomOf="@+id/enterEmail">
+
+        <RadioButton
+            android:id="@+id/student"
+            android:layout_width="106dp"
+            android:layout_height="wrap_content"
+            android:text="@string/student" />
+
+        <RadioButton
+            android:id="@+id/employee"
+            android:layout_width="107dp"
+            android:layout_height="wrap_content"
+            android:text="@string/employee" />
+
+        <RadioButton
+            android:id="@+id/other"
+            android:layout_width="105dp"
+            android:layout_height="wrap_content"
+            android:text="@string/other" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/idNextButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="60dp"
+        android:text="@string/nextButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
