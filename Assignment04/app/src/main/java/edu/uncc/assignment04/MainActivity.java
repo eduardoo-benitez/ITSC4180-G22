@@ -10,9 +10,11 @@ import android.widget.Toast;
 import edu.uncc.assignment04.fragments.DemographicFragment;
 import edu.uncc.assignment04.fragments.IdentificationFragment;
 import edu.uncc.assignment04.fragments.MainFragment;
+import edu.uncc.assignment04.fragments.ProfileFragment;
 import edu.uncc.assignment04.fragments.SelectEducationFragment;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.MainListener, IdentificationFragment.IdentificationListener, SelectEducationFragment.SelectEducationListener, DemographicFragment.DemographicListener {
+public class MainActivity extends AppCompatActivity implements MainFragment.MainListener, IdentificationFragment.IdentificationListener,
+        SelectEducationFragment.SelectEducationListener, DemographicFragment.DemographicListener {
 
     Response response;
 
@@ -34,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
                 .commit();
     }
 
-    //Somehow pass response into demographic??
     //IdentificationFragment -> DemographicFragment
     @Override
     public void goToDemographic(String name, String email, String role) {
@@ -46,13 +47,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
             response = new Response(name, email, role);
 
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.rootView, new DemographicFragment())
+                    .replace(R.id.rootView, DemographicFragment.newInstance(response), "demographic-tag")
                     .addToBackStack(null)
                     .commit();
         }
     }
 
-    //Maybe everything below this into DemographicFragment??
     //DemographicFragment -> EducationFragment
     @Override
     public void goToEducation() {
@@ -62,16 +62,27 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
                 .commit();
     }
 
-    //Maybe use the back stack to go back to demographic instead of replacing??
+    @Override
+    public void goToProfile() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, ProfileFragment.newInstance(response))
+                .addToBackStack(null)
+                .commit();
+    }
+
     //EducationFragment -> DemographicFragment
     @Override
     public void educationUpdate(String education) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.rootView, new DemographicFragment())
-                .addToBackStack(null)
-                .commit();
+        DemographicFragment demographicFragment = (DemographicFragment) getSupportFragmentManager().findFragmentByTag("demographic-tag");
+        if (demographicFragment != null) {
+            demographicFragment.setSelectEducation(education);
+            getSupportFragmentManager().popBackStack();
+        }
+    }
 
-        TextView educationView = findViewById(R.id.textViewEducation);
-        educationView.setText(education);
+    //EducationFragment -> DemographicActivity
+    @Override
+    public void cancelEducationUpdate() {
+        getSupportFragmentManager().popBackStack();
     }
 }

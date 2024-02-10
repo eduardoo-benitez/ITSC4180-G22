@@ -10,10 +10,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import edu.uncc.assignment04.R;
+import edu.uncc.assignment04.Response;
 import edu.uncc.assignment04.databinding.FragmentDemographicBinding;
-import edu.uncc.assignment04.databinding.FragmentIdentificationBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,15 +21,19 @@ import edu.uncc.assignment04.databinding.FragmentIdentificationBinding;
  * create an instance of this fragment.
  */
 public class DemographicFragment extends Fragment {
+    private String selectEducation;
+
+    public void setSelectEducation(String selectEducation) {
+        this.selectEducation = selectEducation;
+        response.setEducation(selectEducation);
+    }
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_RESPONSE = "RESPONSE";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Response response;
 
     public DemographicFragment() {
         // Required empty public constructor
@@ -39,16 +43,14 @@ public class DemographicFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param response Parameter 1.
      * @return A new instance of fragment DemographicFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DemographicFragment newInstance(String param1, String param2) {
+    public static DemographicFragment newInstance(Response response) {
         DemographicFragment fragment = new DemographicFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_RESPONSE, response);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,8 +59,7 @@ public class DemographicFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            this.response = (Response) getArguments().getSerializable(ARG_RESPONSE);
         }
     }
 
@@ -68,6 +69,12 @@ public class DemographicFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDemographicBinding.inflate(inflater, container, false);
+
+        binding.textViewEducation.setText(this.response.getEducation() != null ? this.response.getEducation() : "N/A");
+        binding.textViewMaritalStatus.setText(this.response.getMaritalStatus() != null ? this.response.getMaritalStatus() : "N/A");
+        binding.textViewIncomeStatus.setText(this.response.getIncomeStatus() != null ? this.response.getIncomeStatus() : "N/A");
+        binding.textViewLivingStatus.setText(this.response.getLivingStatus() != null ? this.response.getLivingStatus() : "N/A");
+
         return binding.getRoot();
     }
 
@@ -76,10 +83,35 @@ public class DemographicFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("DemographiFragment");
 
+        if (selectEducation == null) {
+            binding.textViewEducation.setText("N/A");
+        }
+        else {
+            binding.textViewEducation.setText(selectEducation);
+        }
+
         binding.buttonSelectEducation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.goToEducation();
+            }
+        });
+
+        binding.buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (binding.textViewEducation.getText() != "N/A"
+                        && binding.textViewMaritalStatus.getText() != "N/A"
+                        && binding.textViewLivingStatus.getText() != "N/A"
+                        && binding.textViewIncomeStatus.getText() != "N/A") {
+                    mListener.goToProfile();
+                }
+                else {
+                    // Switch the comments to test that each fragment shows on profile screen
+//                    Toast.makeText(getActivity(), "Missing input!!!!!", Toast.LENGTH_LONG).show();
+                    mListener.goToProfile();
+                }
             }
         });
     }
@@ -92,5 +124,6 @@ public class DemographicFragment extends Fragment {
 
     public interface DemographicListener {
         public void goToEducation();
+        public void goToProfile();
     }
 }

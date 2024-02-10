@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import edu.uncc.assignment04.R;
 import edu.uncc.assignment04.databinding.FragmentIdentificationBinding;
@@ -29,7 +30,7 @@ public class SelectEducationFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    String education = "";
+    String education;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -78,22 +79,35 @@ public class SelectEducationFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("SelectEducationFragment");
 
+        RadioGroup radioGroup = binding.radioGroup.findViewById(R.id.radioGroup);
+
+        binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton checkedRadioButton = binding.radioGroup.findViewById(checkedId);
+                if (checkedRadioButton != null) {
+                    education = checkedRadioButton.getText().toString();
+                }
+            }
+        });
         binding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RadioGroup radioGroup = binding.radioGroup.findViewById(R.id.radioGroup);
+                if (education == null) {
+                    Toast.makeText(getActivity(), "Select an education level", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    mListener.educationUpdate(education);
+                }
+            }
+        });
 
-                binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        RadioButton checkedRadioButton = binding.radioGroup.findViewById(checkedId);
-                        if (checkedRadioButton != null) {
-                            education = checkedRadioButton.getText().toString();
-                        }
-                    }
-                });
-                mListener.educationUpdate(education);
+        binding.buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.cancelEducationUpdate();
             }
         });
     }
@@ -104,5 +118,6 @@ public class SelectEducationFragment extends Fragment {
     }
     public interface SelectEducationListener {
         public void educationUpdate(String education);
+        public void cancelEducationUpdate();
     }
 }
