@@ -22,10 +22,15 @@ import edu.uncc.assignment04.databinding.FragmentDemographicBinding;
  */
 public class DemographicFragment extends Fragment {
     private String selectEducation;
+    private String selectMaritalStatus;
 
     public void setSelectEducation(String selectEducation) {
         this.selectEducation = selectEducation;
         response.setEducation(selectEducation);
+    }
+    public void setSelectMaritalStatus(String selectMaritalStatus) {
+        this.selectMaritalStatus = selectMaritalStatus;
+        response.setMaritalStatus(selectMaritalStatus);
     }
 
     // TODO: Rename parameter arguments, choose names that match
@@ -70,30 +75,30 @@ public class DemographicFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentDemographicBinding.inflate(inflater, container, false);
 
-        binding.textViewEducation.setText(this.response.getEducation() != null ? this.response.getEducation() : "N/A");
-        binding.textViewMaritalStatus.setText(this.response.getMaritalStatus() != null ? this.response.getMaritalStatus() : "N/A");
-        binding.textViewIncomeStatus.setText(this.response.getIncomeStatus() != null ? this.response.getIncomeStatus() : "N/A");
-        binding.textViewLivingStatus.setText(this.response.getLivingStatus() != null ? this.response.getLivingStatus() : "N/A");
-
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("DemographiFragment");
+        getActivity().setTitle("DemographicFragment");
 
-        if (selectEducation == null) {
-            binding.textViewEducation.setText("N/A");
-        }
-        else {
-            binding.textViewEducation.setText(selectEducation);
-        }
+        binding.textViewEducation.setText(this.response.getEducation() != null ? this.response.getEducation() : "N/A");
+        binding.textViewMaritalStatus.setText(this.response.getMaritalStatus() != null ? this.response.getMaritalStatus() : "N/A");
+        binding.textViewIncomeStatus.setText(this.response.getIncomeStatus() != null ? this.response.getIncomeStatus() : "N/A");
+        binding.textViewLivingStatus.setText(this.response.getLivingStatus() != null ? this.response.getLivingStatus() : "N/A");
 
         binding.buttonSelectEducation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.goToEducation();
+            }
+        });
+
+        binding.buttonSelectMarital.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.goToMaritalStatus();
             }
         });
 
@@ -108,9 +113,9 @@ public class DemographicFragment extends Fragment {
                     mListener.goToProfile();
                 }
                 else {
-                    // Switch the comments to test that each fragment shows on profile screen
-//                    Toast.makeText(getActivity(), "Missing input!!!!!", Toast.LENGTH_LONG).show();
-                    mListener.goToProfile();
+//                    Switch the comments to test that each input shows on profile screen
+                    Toast.makeText(getActivity(), "Missing input!!!!!", Toast.LENGTH_LONG).show();
+//                    mListener.goToProfile();
                 }
             }
         });
@@ -124,6 +129,7 @@ public class DemographicFragment extends Fragment {
 
     public interface DemographicListener {
         public void goToEducation();
+        public void goToMaritalStatus();
         public void goToProfile();
     }
 }

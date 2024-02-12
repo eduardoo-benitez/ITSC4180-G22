@@ -12,9 +12,10 @@ import edu.uncc.assignment04.fragments.IdentificationFragment;
 import edu.uncc.assignment04.fragments.MainFragment;
 import edu.uncc.assignment04.fragments.ProfileFragment;
 import edu.uncc.assignment04.fragments.SelectEducationFragment;
+import edu.uncc.assignment04.fragments.SelectMaritalStatusFragment;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.MainListener, IdentificationFragment.IdentificationListener,
-        SelectEducationFragment.SelectEducationListener, DemographicFragment.DemographicListener {
+        SelectEducationFragment.SelectEducationListener, DemographicFragment.DemographicListener, SelectMaritalStatusFragment.SelectMaritalStatusListener {
 
     Response response;
 
@@ -63,9 +64,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
     }
 
     @Override
-    public void goToProfile() {
+    public void goToMaritalStatus() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.rootView, ProfileFragment.newInstance(response))
+                .replace(R.id.rootView, new SelectMaritalStatusFragment())
                 .addToBackStack(null)
                 .commit();
     }
@@ -84,5 +85,26 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
     @Override
     public void cancelEducationUpdate() {
         getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void maritalStatusUpdate(String maritalStatus) {
+        DemographicFragment demographicFragment = (DemographicFragment) getSupportFragmentManager().findFragmentByTag("demographic-tag");
+        if (demographicFragment != null) {
+            demographicFragment.setSelectMaritalStatus(maritalStatus);
+            getSupportFragmentManager().popBackStack();
+        }
+    }
+
+    @Override
+    public void cancelMaritalStatusUpdate() {
+        getSupportFragmentManager().popBackStack();
+    }
+    @Override
+    public void goToProfile() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, ProfileFragment.newInstance(response))
+                .addToBackStack(null)
+                .commit();
     }
 }
