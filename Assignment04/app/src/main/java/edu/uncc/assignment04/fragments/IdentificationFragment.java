@@ -82,23 +82,22 @@ public class IdentificationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("IdentificationFragment");
 
+        binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton checkedRadioButton = binding.radioGroup.findViewById(checkedId);
+                if (checkedRadioButton != null) {
+                    role = checkedRadioButton.getText().toString();
+                }
+            }
+        });
+
         binding.buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 name = binding.editTextName.getText().toString();
                 email = binding.editTextEmail.getText().toString();
 
-                RadioGroup radioGroup = binding.radioGroup.findViewById(R.id.radioGroup);
-
-                binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        RadioButton checkedRadioButton = binding.radioGroup.findViewById(checkedId);
-                        if (checkedRadioButton != null) {
-                            role = checkedRadioButton.getText().toString();
-                        }
-                    }
-                });
                 mListener.goToDemographic(name, email, role);
             }
         });
