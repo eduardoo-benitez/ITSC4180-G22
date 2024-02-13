@@ -12,10 +12,13 @@ import edu.uncc.assignment04.fragments.IdentificationFragment;
 import edu.uncc.assignment04.fragments.MainFragment;
 import edu.uncc.assignment04.fragments.ProfileFragment;
 import edu.uncc.assignment04.fragments.SelectEducationFragment;
+import edu.uncc.assignment04.fragments.SelectIncomeFragment;
+import edu.uncc.assignment04.fragments.SelectLivingStatusFragment;
 import edu.uncc.assignment04.fragments.SelectMaritalStatusFragment;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.MainListener, IdentificationFragment.IdentificationListener,
-        SelectEducationFragment.SelectEducationListener, DemographicFragment.DemographicListener, SelectMaritalStatusFragment.SelectMaritalStatusListener {
+        SelectEducationFragment.SelectEducationListener, DemographicFragment.DemographicListener, SelectMaritalStatusFragment.SelectMaritalStatusListener,
+        SelectLivingStatusFragment.SelectLivingStatusListener, SelectIncomeFragment.SelectIncomeListener {
 
     Response response;
 
@@ -70,6 +73,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
                 .addToBackStack(null)
                 .commit();
     }
+    @Override
+    public void goToLivingStatus() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new SelectLivingStatusFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+    @Override
+    public void goToIncome() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new SelectIncomeFragment())
+                .addToBackStack(null)
+                .commit();
+    }
 
     //EducationFragment -> DemographicFragment
     @Override
@@ -95,9 +112,32 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
             getSupportFragmentManager().popBackStack();
         }
     }
-
     @Override
     public void cancelMaritalStatusUpdate() {
+        getSupportFragmentManager().popBackStack();
+    }
+    @Override
+    public void livingStatusUpdate(String livingStatus) {
+        DemographicFragment demographicFragment = (DemographicFragment) getSupportFragmentManager().findFragmentByTag("demographic-tag");
+        if (demographicFragment != null) {
+            demographicFragment.setSelectLivingStatus(livingStatus);
+            getSupportFragmentManager().popBackStack();
+        }
+    }
+    @Override
+    public void cancelLivingStatusUpdate() {
+        getSupportFragmentManager().popBackStack();
+    }
+    @Override
+    public void incomeUpdate(String income) {
+        DemographicFragment demographicFragment = (DemographicFragment) getSupportFragmentManager().findFragmentByTag("demographic-tag");
+        if (demographicFragment != null) {
+            demographicFragment.setSelectIncome(income);
+            getSupportFragmentManager().popBackStack();
+        }
+    }
+    @Override
+    public void cancelIncomeUpdate() {
         getSupportFragmentManager().popBackStack();
     }
     @Override

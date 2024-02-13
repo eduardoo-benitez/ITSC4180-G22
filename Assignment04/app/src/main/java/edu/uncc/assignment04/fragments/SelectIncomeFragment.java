@@ -1,14 +1,25 @@
 package edu.uncc.assignment04.fragments;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import edu.uncc.assignment04.R;
+import edu.uncc.assignment04.databinding.FragmentSelectIncomeBinding;
+import edu.uncc.assignment04.databinding.FragmentSelectLivingStatusBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +36,7 @@ public class SelectIncomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    String income = "$50k to < $100k";
 
     public SelectIncomeFragment() {
         // Required empty public constructor
@@ -57,10 +69,79 @@ public class SelectIncomeFragment extends Fragment {
         }
     }
 
+    FragmentSelectIncomeBinding binding;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_select_income, container, false);
+        binding = FragmentSelectIncomeBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("SelectIncomeFragment");
+
+
+        binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (progress == 0 ){
+                    binding.textViewHouseHoldIncome.setText("<$25K");
+                    income = "<$25K";
+                }
+                else if (progress == 1){
+                    binding.textViewHouseHoldIncome.setText("$25K to < $50K");
+                    income = "$25K to < $50K";
+                }
+                else if (progress == 2 ){
+                    binding.textViewHouseHoldIncome.setText("$50K to < $100K");
+                    income = "$50K to < $100K";
+                }
+                else if (progress == 3) {
+                    binding.textViewHouseHoldIncome.setText("$100K to < $200K");
+                    income = "$100K to < $200K";
+                }
+                else if (progress == 4 ){
+                    binding.textViewHouseHoldIncome.setText("<$200K");
+                    income = "<$200K";
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+
+        });
+        binding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.incomeUpdate(income);
+            }
+        });
+
+        binding.buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.cancelIncomeUpdate();
+            }
+        });
+    }
+    SelectIncomeFragment.SelectIncomeListener mListener;
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mListener = (SelectIncomeFragment.SelectIncomeListener)context;
+    }
+    public interface SelectIncomeListener {
+        public void incomeUpdate(String income);
+        public void cancelIncomeUpdate();
     }
 }

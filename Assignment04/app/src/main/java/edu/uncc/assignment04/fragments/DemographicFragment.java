@@ -23,6 +23,8 @@ import edu.uncc.assignment04.databinding.FragmentDemographicBinding;
 public class DemographicFragment extends Fragment {
     private String selectEducation;
     private String selectMaritalStatus;
+    private String setSelectLivingStatus;
+    private String setSelectIncome;
 
     public void setSelectEducation(String selectEducation) {
         this.selectEducation = selectEducation;
@@ -31,6 +33,15 @@ public class DemographicFragment extends Fragment {
     public void setSelectMaritalStatus(String selectMaritalStatus) {
         this.selectMaritalStatus = selectMaritalStatus;
         response.setMaritalStatus(selectMaritalStatus);
+    }
+
+    public void setSelectLivingStatus(String selectLivingStatus) {
+        this.setSelectLivingStatus = selectLivingStatus;
+        response.setLivingStatus(selectLivingStatus);
+    }
+    public void setSelectIncome(String selectIncome) {
+        this.setSelectIncome = selectIncome;
+        response.setIncomeStatus(selectIncome);
     }
 
     // TODO: Rename parameter arguments, choose names that match
@@ -102,6 +113,14 @@ public class DemographicFragment extends Fragment {
             }
         });
 
+        binding.buttonSelectLiving.setOnClickListener(new View.OnClickListener() {
+            @Override
+                    public void onClick(View v) { mListener.goToLivingStatus();}
+        });
+        binding.buttonSelectIncome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { mListener.goToIncome();}
+        });
         binding.buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,9 +132,7 @@ public class DemographicFragment extends Fragment {
                     mListener.goToProfile();
                 }
                 else {
-//                    Switch the comments to test that each input shows on profile screen
                     Toast.makeText(getActivity(), "Missing input!!!!!", Toast.LENGTH_LONG).show();
-//                    mListener.goToProfile();
                 }
             }
         });
@@ -131,5 +148,7 @@ public class DemographicFragment extends Fragment {
         public void goToEducation();
         public void goToMaritalStatus();
         public void goToProfile();
+        public void goToLivingStatus();
+        public void goToIncome();
     }
 }
