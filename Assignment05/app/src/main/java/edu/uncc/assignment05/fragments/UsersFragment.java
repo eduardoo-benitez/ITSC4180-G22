@@ -1,49 +1,45 @@
 package edu.uncc.assignment05.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import edu.uncc.assignment05.R;
+import edu.uncc.assignment05.UserAdapter;
+import edu.uncc.assignment05.databinding.FragmentUsersBinding;
+import edu.uncc.assignment05.models.User;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link UsersFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class UsersFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public void addUser(User newUser) {
+        mUsers.add(newUser);
+    }
+    private static final String ARG_USER = "USER";
+    private ArrayList<User> mUsers;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    ListView listview;
+    UserAdapter adapter;
     public UsersFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UsersFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UsersFragment newInstance(String param1, String param2) {
+    public static UsersFragment newInstance(ArrayList<User> mUsers) {
         UsersFragment fragment = new UsersFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_USER, mUsers);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,15 +48,62 @@ public class UsersFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            this.mUsers = (ArrayList<User>) getArguments().getSerializable(ARG_USER);
         }
     }
 
+    FragmentUsersBinding binding;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_users, container, false);
+        binding = FragmentUsersBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("UsersFragment");
+
+        listview = binding.listView.findViewById(R.id.listView);
+        adapter = new UserAdapter(getActivity(), R.layout.user_list_item, mUsers);
+        listview.setAdapter(adapter);
+
+        binding.buttonClearAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUsers.clear();
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        binding.buttonSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUsers.sort(new Comparator<User>() {
+                    @Override
+                    public int compare(User u1, User u2) {
+                        return u1.getName().compareTo(u2.getName());
+                    }
+                });
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        binding.buttonAddNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.goToAddUser();
+            }
+        });
+    }
+
+    UsersListener mListener;
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mListener = (UsersListener) context;
+    }
+
+    public interface UsersListener {
+        public void goToAddUser();
     }
 }
