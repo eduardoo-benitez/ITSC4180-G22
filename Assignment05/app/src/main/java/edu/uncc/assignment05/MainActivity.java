@@ -18,9 +18,10 @@ import edu.uncc.assignment05.fragments.UsersFragment;
 import edu.uncc.assignment05.models.User;
 
 public class MainActivity extends AppCompatActivity implements
-        UsersFragment.UsersListener, AddUserFragment.AddUserListener, SelectSortFragment.SelectSortListener,
-        SelectGenderFragment.SelectGenderListener, SelectAgeFragment.SelectAgeListener, UserDetailsFragment.UserDetailsListener ,
-        SelectStateFragment.SelectStateListener, SelectGroupFragment.SelectGroupListener {
+        UsersFragment.UsersListener, AddUserFragment.AddUserListener,
+        SelectGenderFragment.SelectGenderListener, SelectAgeFragment.SelectAgeListener,
+        SelectStateFragment.SelectStateListener, SelectGroupFragment.SelectGroupListener,
+        UserDetailsFragment.UserDetailsListener, SelectSortFragment.SelectSortListener {
 
     private ArrayList<User> mUsers = new ArrayList<>();
 
@@ -29,16 +30,25 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //test user
-        mUsers.add(new User("Zname1", "Aemail1", "Zgender1", 1, "Astate1", "Zgroup1"));
-        mUsers.add(new User("Aname2", "Zemail2", "Agender2", 2, "Zstate2", "Agroup2"));
-
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.rootView, UsersFragment.newInstance(mUsers), "users-tag")
                 .addToBackStack(null)
                 .commit();
     }
-
+    @Override
+    public void goToAddUser() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new AddUserFragment(), "add-user-tag")
+                .addToBackStack(null)
+                .commit();
+    }
+    @Override
+    public void goToUserDetails(User user, int position) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, UserDetailsFragment.newInstance(user, position))
+                .addToBackStack(null)
+                .commit();
+    }
     @Override
     public void goToSort() {
         getSupportFragmentManager().beginTransaction()
@@ -47,21 +57,6 @@ public class MainActivity extends AppCompatActivity implements
                 .commit();
     }
 
-    @Override
-    public void goToAddUser() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.rootView, new AddUserFragment(), "add-user-tag")
-                .addToBackStack(null)
-                .commit();
-    }
-
-    @Override
-    public void goToUserDetails(User user, int position) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.rootView, UserDetailsFragment.newInstance(user, position))
-                .addToBackStack(null)
-                .commit();
-    }
 
     @Override
     public void goToGender() {
@@ -70,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements
                 .addToBackStack(null)
                 .commit();
     }
-
     @Override
     public void goToAge() {
         getSupportFragmentManager().beginTransaction()
@@ -78,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements
                 .addToBackStack(null)
                 .commit();
     }
-
     @Override
     public void goToState() {
         getSupportFragmentManager().beginTransaction()
@@ -86,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements
                 .addToBackStack(null)
                 .commit();
     }
-
     @Override
     public void goToGroup() {
         getSupportFragmentManager().beginTransaction()
@@ -105,16 +97,15 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void sortToUsers(Comparator <User> comparator) {
-        UsersFragment usersFragment = (UsersFragment) getSupportFragmentManager().findFragmentByTag("users-tag");
-        if (usersFragment != null) {
-            usersFragment.sortUsers(comparator);
+    public void selectGender(String gender) {
+        AddUserFragment addUserFragment = (AddUserFragment) getSupportFragmentManager().findFragmentByTag("add-user-tag");
+        if (addUserFragment != null) {
+            addUserFragment.setGender(gender);
             getSupportFragmentManager().popBackStack();
         }
     }
-
     @Override
-    public void sortToUsersCancel() {
+    public void cancelSelectGender() {
         getSupportFragmentManager().popBackStack();
     }
 
@@ -126,51 +117,8 @@ public class MainActivity extends AppCompatActivity implements
             getSupportFragmentManager().popBackStack();
         }
     }
-
     @Override
     public void cancelSelectAge() {
-        getSupportFragmentManager().popBackStack();
-    }
-
-    @Override
-    public void deleteUserDetails(int position) {
-        UsersFragment usersFragment = (UsersFragment) getSupportFragmentManager().findFragmentByTag("users-tag");
-        if (usersFragment != null) {
-            usersFragment.deleteUser(position);
-            getSupportFragmentManager().popBackStack();
-        }
-    }
-
-    @Override
-    public void userDetailsBack() {
-        getSupportFragmentManager().popBackStack();
-    }
-
-    @Override
-    public void selectGender(String gender) {
-        AddUserFragment addUserFragment = (AddUserFragment) getSupportFragmentManager().findFragmentByTag("add-user-tag");
-        if (addUserFragment != null) {
-            addUserFragment.setGender(gender);
-            getSupportFragmentManager().popBackStack();
-        }
-    }
-
-    @Override
-    public void cancelSelectGender() {
-        getSupportFragmentManager().popBackStack();
-    }
-
-    @Override
-    public void selectGroup(String group) {
-        AddUserFragment addUserFragment = (AddUserFragment) getSupportFragmentManager().findFragmentByTag("add-user-tag");
-        if (addUserFragment != null) {
-            addUserFragment.setGroup(group);
-            getSupportFragmentManager().popBackStack();
-        }
-    }
-
-    @Override
-    public void cancelSelectGroup() {
         getSupportFragmentManager().popBackStack();
     }
 
@@ -182,9 +130,47 @@ public class MainActivity extends AppCompatActivity implements
             getSupportFragmentManager().popBackStack();
         }
     }
-
     @Override
     public void cancelSelectState() {
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void selectGroup(String group) {
+        AddUserFragment addUserFragment = (AddUserFragment) getSupportFragmentManager().findFragmentByTag("add-user-tag");
+        if (addUserFragment != null) {
+            addUserFragment.setGroup(group);
+            getSupportFragmentManager().popBackStack();
+        }
+    }
+    @Override
+    public void cancelSelectGroup() {
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void deleteUserDetails(int position) {
+        UsersFragment usersFragment = (UsersFragment) getSupportFragmentManager().findFragmentByTag("users-tag");
+        if (usersFragment != null) {
+            usersFragment.deleteUser(position);
+            getSupportFragmentManager().popBackStack();
+        }
+    }
+    @Override
+    public void userDetailsBack() {
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void sortToUsers(Comparator <User> comparator) {
+        UsersFragment usersFragment = (UsersFragment) getSupportFragmentManager().findFragmentByTag("users-tag");
+        if (usersFragment != null) {
+            usersFragment.sortUsers(comparator);
+            getSupportFragmentManager().popBackStack();
+        }
+    }
+    @Override
+    public void sortToUsersCancel() {
         getSupportFragmentManager().popBackStack();
     }
 }

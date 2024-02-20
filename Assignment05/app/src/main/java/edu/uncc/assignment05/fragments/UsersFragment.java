@@ -114,8 +114,8 @@ public class UsersFragment extends Fragment {
     }
 
     public interface UsersListener {
-        public void goToSort();
         public void goToAddUser();
         public void goToUserDetails(User user, int position);
+        public void goToSort();
     }
 }
