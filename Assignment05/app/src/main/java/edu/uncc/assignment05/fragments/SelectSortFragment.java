@@ -64,24 +64,58 @@ public class SelectSortFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         Comparator<User> comparator = null;
+        String sortText = "Sort by Name (ASC)";
 
         if (v == binding.imageViewNameAscending || v == binding.imageViewNameDescending) {
             comparator = Comparator.comparing(User::getName);
+            if (v == binding.imageViewNameDescending) {
+                sortText = "Sort by Name (DESC)";
+            }
         }
         else if (v == binding.imageViewEmailAscending || v == binding.imageViewEmailDescending) {
             comparator = Comparator.comparing(User::getEmail);
+            if (v == binding.imageViewEmailAscending) {
+                sortText = "Sort by Email (ASC)";
+            }
+            else if (v == binding.imageViewEmailDescending) {
+                sortText = "Sort by Email (DESC)";
+            }
         }
         else if (v == binding.imageViewGenderAscending || v == binding.imageViewGenderDescending) {
             comparator = Comparator.comparing(User::getGender);
+            if (v == binding.imageViewGenderAscending) {
+                sortText = "Sort by Gender (ASC)";
+            }
+            else if (v == binding.imageViewGenderDescending) {
+                sortText = "Sort by Gender (DESC)";
+            }
         }
         else if (v == binding.imageViewAgeAscending || v == binding.imageViewAgeDescending) {
             comparator = Comparator.comparingInt(User::getAge);
+            if (v == binding.imageViewAgeAscending) {
+                sortText = "Sort by Age (ASC)";
+            }
+            else if (v == binding.imageViewAgeDescending) {
+                sortText = "Sort by Age (DESC)";
+            }
         }
         else if (v == binding.imageViewStateAscending || v == binding.imageViewStateDescending) {
             comparator = Comparator.comparing(User::getState);
+            if (v == binding.imageViewStateAscending) {
+                sortText = "Sort by State (ASC)";
+            }
+            else if (v == binding.imageViewStateDescending) {
+                sortText = "Sort by State (DESC)";
+            }
         }
         else if (v == binding.imageViewGroupAscending || v == binding.imageViewGroupDescending) {
             comparator = Comparator.comparing(User::getGroup);
+            if (v == binding.imageViewGroupAscending) {
+                sortText = "Sort by Group (ASC)";
+            }
+            else if (v == binding.imageViewGroupDescending) {
+                sortText = "Sort by Group (DESC)";
+            }
         }
         else if (v == binding.buttonCancel) {
             mListener.sortToUsersCancel();
@@ -97,11 +131,11 @@ public class SelectSortFragment extends Fragment implements View.OnClickListener
             comparator = comparator.reversed();
         }
 
-        mListener.sortToUsers(comparator);
+        mListener.sortToUsers(comparator, sortText);
     }
 
     public interface SelectSortListener {
-        public void sortToUsers(Comparator<User> comparator);
+        public void sortToUsers(Comparator<User> comparator, String sortText);
         public void sortToUsersCancel();
 
     }

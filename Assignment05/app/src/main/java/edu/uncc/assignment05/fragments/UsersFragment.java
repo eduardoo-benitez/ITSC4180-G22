@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,32 +24,26 @@ import edu.uncc.assignment05.models.User;
 
 public class UsersFragment extends Fragment {
 
-    public void addUser(User newUser) {
-        mUsers.add(newUser);
-    }
-    public void sortUsers(Comparator<User> comparator) {
-        mUsers.sort(comparator);
-        adapter.notifyDataSetChanged();
-    }
-
-    public void deleteUser(int position) {
-        mUsers.remove(position);
-        adapter.notifyDataSetChanged();
+    public void setSortText(String sortText) {
+        this.sortText = sortText;
     }
 
     private static final String ARG_USERS = "USERS";
+    private static final String ARG_SORT = "SORT";
     private ArrayList<User> mUsers;
+    private String sortText;
 
-    ListView listview;
     UserAdapter adapter;
+
     public UsersFragment() {
         // Required empty public constructor
     }
 
-    public static UsersFragment newInstance(ArrayList<User> mUsers) {
+    public static UsersFragment newInstance(ArrayList<User> mUsers, String sortText) {
         UsersFragment fragment = new UsersFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USERS, mUsers);
+        args.putString(ARG_SORT, sortText);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,6 +53,7 @@ public class UsersFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.mUsers = (ArrayList<User>) getArguments().getSerializable(ARG_USERS);
+            this.sortText = getArguments().getString(ARG_SORT);
         }
     }
 
@@ -73,9 +69,10 @@ public class UsersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("UsersFragment");
 
-        listview = binding.listView.findViewById(R.id.listView);
+        binding.textViewSortIndicator.setText(sortText);
+
         adapter = new UserAdapter(getActivity(), R.layout.user_list_item, mUsers);
-        listview.setAdapter(adapter);
+        binding.listView.setAdapter(adapter);
 
         binding.buttonClearAll.setOnClickListener(new View.OnClickListener() {
             @Override

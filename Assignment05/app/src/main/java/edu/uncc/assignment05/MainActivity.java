@@ -3,6 +3,7 @@ package edu.uncc.assignment05;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements
         UserDetailsFragment.UserDetailsListener, SelectSortFragment.SelectSortListener {
 
     private ArrayList<User> mUsers = Data.sampleTestUsers;
+    private String sortText = "Sort by Name (ASC)";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.rootView, UsersFragment.newInstance(mUsers), "users-tag")
+                .add(R.id.rootView, UsersFragment.newInstance(mUsers, sortText), "users-tag")
                 .addToBackStack(null)
                 .commit();
     }
@@ -90,11 +92,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void userUpdate(User newUser) {
-        UsersFragment usersFragment = (UsersFragment) getSupportFragmentManager().findFragmentByTag("users-tag");
-        if (usersFragment != null) {
-            usersFragment.addUser(newUser);
-            getSupportFragmentManager().popBackStack();
-        }
+        mUsers.add(newUser);
+        getSupportFragmentManager().popBackStack();
     }
 
     @Override
@@ -151,11 +150,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void deleteUserDetails(int position) {
-        UsersFragment usersFragment = (UsersFragment) getSupportFragmentManager().findFragmentByTag("users-tag");
-        if (usersFragment != null) {
-            usersFragment.deleteUser(position);
-            getSupportFragmentManager().popBackStack();
-        }
+        mUsers.remove(position);
+        getSupportFragmentManager().popBackStack();
     }
     @Override
     public void userDetailsBack() {
@@ -163,10 +159,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void sortToUsers(Comparator <User> comparator) {
+    public void sortToUsers(Comparator <User> comparator, String sortText) {
         UsersFragment usersFragment = (UsersFragment) getSupportFragmentManager().findFragmentByTag("users-tag");
         if (usersFragment != null) {
-            usersFragment.sortUsers(comparator);
+            mUsers.sort(comparator);
+            usersFragment.setSortText(sortText);
             getSupportFragmentManager().popBackStack();
         }
     }
