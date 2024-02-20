@@ -12,27 +12,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import edu.uncc.assignment05.R;
 import edu.uncc.assignment05.databinding.FragmentAddUserBinding;
 import edu.uncc.assignment05.models.User;
 
 public class AddUserFragment extends Fragment {
 
     private User newUser;
+    private String gender;
+    private int age = -1;
+    private String state;
+    private String group;
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+    public void setState(String state) {
+        this.state = state;
+    }
+    public void setGroup(String group) {
+        this.group = group;
+    }
 
     public AddUserFragment() {
         // Required empty public constructor
-    }
-
-    public static AddUserFragment newInstance(String param1, String param2) {
-        AddUserFragment fragment = new AddUserFragment();
-        Bundle args = new Bundle();
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     FragmentAddUserBinding binding;
@@ -40,13 +45,18 @@ public class AddUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding=FragmentAddUserBinding.inflate(inflater, container, false);
+        binding = FragmentAddUserBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("AddUserFragment");
+
+        binding.textViewGender.setText(this.gender != null ? this.gender : "N/A");
+        binding.textViewAge.setText(this.age != -1 ? String.valueOf(age) : "N/A");
+        binding.textViewState.setText(this.state != null ? this.state : "N/A");
+        binding.textViewGroup.setText(this.group!= null ? this.group: "N/A");
 
         binding.buttonSelectGender.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,13 +92,19 @@ public class AddUserFragment extends Fragment {
 
                 String name = binding.editTextName.getText().toString();
                 String email = binding.editTextEmail.getText().toString();
-                String gender = binding.textViewGender.getText().toString();
-                int age = Integer.valueOf(binding.textViewGender.getText().toString());
-                String state = binding.textViewGender.getText().toString();
-                String group = binding.textViewGender.getText().toString();
 
-                newUser = new User(name, email, gender, age, state, group);
-                mListener.userUpdate(newUser);
+                if (binding.editTextName.getText().toString().equals("N/A")
+                        || binding.editTextEmail.getText().toString().equals("N/A")
+                        || binding.textViewGender.getText().toString().equals("N/A")
+                        || binding.textViewAge.getText().toString().equals("N/A")
+                        || binding.textViewState.getText().toString().equals("N/A")
+                        || binding.textViewGroup.getText().toString().equals("N/A")) {
+                    Toast.makeText(getActivity(), "Missing input!!!!!", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    newUser = new User(name, email, gender, age, state, group);
+                    mListener.userUpdate(newUser);
+                }
             }
         });
     }
@@ -96,13 +112,13 @@ public class AddUserFragment extends Fragment {
     AddUserListener mListener;
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mListener = (AddUserFragment.AddUserListener)context;
+        mListener = (AddUserListener)context;
     }
     public interface AddUserListener {
-        public void goToGender();
-        public void goToAge();
-        public void goToState();
-        public void goToGroup();
-        public void userUpdate(User newUser);
+        void goToGender();
+        void goToAge();
+        void goToState();
+        void goToGroup();
+        void userUpdate(User newUser);
     }
 }

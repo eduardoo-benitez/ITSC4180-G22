@@ -31,14 +31,16 @@ public class UserAdapter extends ArrayAdapter<User> {
 
         TextView textViewName = convertView.findViewById(R.id.textViewName);
         TextView textViewEmail = convertView.findViewById(R.id.textViewEmail);
-        TextView textViewAge = convertView.findViewById(R.id.textViewAge);
         TextView textViewGender = convertView.findViewById(R.id.textViewGender);
+        TextView textViewAge = convertView.findViewById(R.id.textViewAge);
+        TextView textViewState = convertView.findViewById(R.id.textViewState);
         TextView textViewGroup = convertView.findViewById(R.id.textViewGroup);
 
         textViewName.setText(user.getName());
         textViewEmail.setText(user.getEmail());
-        textViewAge.setText(String.valueOf(user.getAge()));
         textViewGender.setText(user.getGender());
+        textViewAge.setText(String.valueOf(user.getAge()));
+        textViewState.setText(user.getState());
         textViewGroup.setText(user.getGroup());
 
         return convertView;

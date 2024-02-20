@@ -10,11 +10,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 import edu.uncc.assignment05.R;
@@ -27,7 +26,17 @@ public class UsersFragment extends Fragment {
     public void addUser(User newUser) {
         mUsers.add(newUser);
     }
-    private static final String ARG_USER = "USER";
+    public void sortUsers(Comparator<User> comparator) {
+        mUsers.sort(comparator);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void deleteUser(int position) {
+        mUsers.remove(position);
+        adapter.notifyDataSetChanged();
+    }
+
+    private static final String ARG_USERS = "USERS";
     private ArrayList<User> mUsers;
 
     ListView listview;
@@ -39,7 +48,7 @@ public class UsersFragment extends Fragment {
     public static UsersFragment newInstance(ArrayList<User> mUsers) {
         UsersFragment fragment = new UsersFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_USER, mUsers);
+        args.putSerializable(ARG_USERS, mUsers);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,7 +57,7 @@ public class UsersFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.mUsers = (ArrayList<User>) getArguments().getSerializable(ARG_USER);
+            this.mUsers = (ArrayList<User>) getArguments().getSerializable(ARG_USERS);
         }
     }
 
@@ -79,13 +88,7 @@ public class UsersFragment extends Fragment {
         binding.buttonSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUsers.sort(new Comparator<User>() {
-                    @Override
-                    public int compare(User u1, User u2) {
-                        return u1.getName().compareTo(u2.getName());
-                    }
-                });
-                adapter.notifyDataSetChanged();
+                mListener.goToSort();
             }
         });
 
@@ -93,6 +96,13 @@ public class UsersFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mListener.goToAddUser();
+            }
+        });
+
+        binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mListener.goToUserDetails(mUsers.get(position), position);
             }
         });
     }
@@ -104,6 +114,8 @@ public class UsersFragment extends Fragment {
     }
 
     public interface UsersListener {
+        public void goToSort();
         public void goToAddUser();
+        public void goToUserDetails(User user, int position);
     }
 }
