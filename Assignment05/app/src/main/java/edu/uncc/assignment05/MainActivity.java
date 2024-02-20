@@ -15,6 +15,7 @@ import edu.uncc.assignment05.fragments.SelectSortFragment;
 import edu.uncc.assignment05.fragments.SelectStateFragment;
 import edu.uncc.assignment05.fragments.UserDetailsFragment;
 import edu.uncc.assignment05.fragments.UsersFragment;
+import edu.uncc.assignment05.models.Data;
 import edu.uncc.assignment05.models.User;
 
 public class MainActivity extends AppCompatActivity implements
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements
         SelectStateFragment.SelectStateListener, SelectGroupFragment.SelectGroupListener,
         UserDetailsFragment.UserDetailsListener, SelectSortFragment.SelectSortListener {
 
-    private ArrayList<User> mUsers = new ArrayList<>();
+    private ArrayList<User> mUsers = Data.sampleTestUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
