@@ -29,9 +29,9 @@ public class UsersFragment extends Fragment {
     }
 
     private static final String ARG_USERS = "USERS";
-    private static final String ARG_SORT = "SORT";
-    private ArrayList<User> mUsers;
-    private String sortText;
+    private ArrayList<User> mUsers; //we need an adapter for each fragment that has a ListView that is to display an array. this one
+                                    //is a custom one that is made specifically for an array of Users. defined in UserAdapter.java.
+    private String sortText = "Sort by Name (ASC)";
 
     UserAdapter adapter;
 
@@ -39,11 +39,10 @@ public class UsersFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static UsersFragment newInstance(ArrayList<User> mUsers, String sortText) {
+    public static UsersFragment newInstance(ArrayList<User> mUsers) {
         UsersFragment fragment = new UsersFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USERS, mUsers);
-        args.putString(ARG_SORT, sortText);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,7 +52,6 @@ public class UsersFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.mUsers = (ArrayList<User>) getArguments().getSerializable(ARG_USERS);
-            this.sortText = getArguments().getString(ARG_SORT);
         }
     }
 
@@ -99,7 +97,7 @@ public class UsersFragment extends Fragment {
         binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mListener.goToUserDetails(mUsers.get(position), position);
+                mListener.goToUserDetails(mUsers.get(position), position); //pass both the user to be displayed and it's index so it can be deleted later, if that option is selected.
             }
         });
     }

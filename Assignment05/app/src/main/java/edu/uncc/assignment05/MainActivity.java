@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity implements
         UserDetailsFragment.UserDetailsListener, SelectSortFragment.SelectSortListener {
 
     private ArrayList<User> mUsers = Data.sampleTestUsers;
-    private String sortText = "Sort by Name (ASC)";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +33,17 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.rootView, UsersFragment.newInstance(mUsers, sortText), "users-tag")
-                .addToBackStack(null)
-                .commit();
-    }
+                .add(R.id.rootView, UsersFragment.newInstance(mUsers), "users-tag") //we use .newInstance(args) to initialize a Fragment with data. As such we need
+                .addToBackStack(null)                                              //a newInstance function + an onCreate in the Fragment.
+                .commit();                                                               //we need a tag in case we need to come back and update the fields (other than mUsers since when we update it in MainActivity, it also updates in Users (see lines 164 & 165))
+    }                                                                                    //make sure to use .add for the first fragment rendered in onCreate and not .replace
+
     @Override
     public void goToAddUser() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.rootView, new AddUserFragment(), "add-user-tag")
-                .addToBackStack(null)
-                .commit();
+                .replace(R.id.rootView, new AddUserFragment(), "add-user-tag") //we use new Fragment() when we do not need to initialize the Fragment with anything.
+                .addToBackStack(null)                                        //we do not need newInstance + an onCreate in the Fragment, we just use the default constructor.
+                .commit();                                                         //we need a tag in case we need to come back and update the fields
     }
     @Override
     public void goToUserDetails(User user, int position) {
@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements
                 .addToBackStack(null)
                 .commit();
     }
-
 
     @Override
     public void goToGender() {
@@ -92,14 +91,14 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void userUpdate(User newUser) {
-        mUsers.add(newUser);
+        mUsers.add(newUser); //since .add directly updates the mUsers array in memory, we do not need to reference any sort of setter in UsersFragment.
         getSupportFragmentManager().popBackStack();
     }
 
     @Override
     public void selectGender(String gender) {
-        AddUserFragment addUserFragment = (AddUserFragment) getSupportFragmentManager().findFragmentByTag("add-user-tag");
-        if (addUserFragment != null) {
+        AddUserFragment addUserFragment = (AddUserFragment) getSupportFragmentManager().findFragmentByTag("add-user-tag"); //when we need to UPDATE fields within a Fragment that has already been
+        if (addUserFragment != null) {                                                                                     //initialized (like AddUser has been on line 41. REMEMBER THE TAG).
             addUserFragment.setGender(gender);
             getSupportFragmentManager().popBackStack();
         }
@@ -162,8 +161,8 @@ public class MainActivity extends AppCompatActivity implements
     public void sortToUsers(Comparator <User> comparator, String sortText) {
         UsersFragment usersFragment = (UsersFragment) getSupportFragmentManager().findFragmentByTag("users-tag");
         if (usersFragment != null) {
-            mUsers.sort(comparator);
-            usersFragment.setSortText(sortText);
+            mUsers.sort(comparator); //because mUsers is an ArrayList, and .sort updates the same array in memory, it may be updated in MainActivity and said change is then reflected in UsersFragment, which was initialized with the same ArrayList (line 36). If we did not need to also update the string below we could have just has this function be the same as the ones on line 93 or 151.
+            usersFragment.setSortText(sortText); //if we wanted to update sortText in a similar way as mUsers above, we would need do: this.sortText = sortText. HOWEVER, this creates a copy of the string in memory. this new string is separate from the one present in UsersFragment, causing the change to not reflect in UsersFragment. As such we need to use a setter defined in UsersFragment in order to update the string present in UsersFragment.
             getSupportFragmentManager().popBackStack();
         }
     }

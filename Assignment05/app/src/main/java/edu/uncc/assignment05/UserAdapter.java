@@ -24,11 +24,12 @@ public class UserAdapter extends ArrayAdapter<User> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.user_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.user_list_item, parent, false); //inflate the layout used for the custom adapter.
         }
 
         User user = getItem(position);
 
+        //create TextViews for each of the field. pulled from the user_list_item.xml
         TextView textViewName = convertView.findViewById(R.id.textViewName);
         TextView textViewEmail = convertView.findViewById(R.id.textViewEmail);
         TextView textViewGender = convertView.findViewById(R.id.textViewGender);
@@ -36,6 +37,7 @@ public class UserAdapter extends ArrayAdapter<User> {
         TextView textViewState = convertView.findViewById(R.id.textViewState);
         TextView textViewGroup = convertView.findViewById(R.id.textViewGroup);
 
+        //set text of the newly created TextViews
         textViewName.setText(user.getName());
         textViewEmail.setText(user.getEmail());
         textViewGender.setText(user.getGender());

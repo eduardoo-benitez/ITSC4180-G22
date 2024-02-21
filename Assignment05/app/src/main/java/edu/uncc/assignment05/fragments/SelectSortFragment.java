@@ -131,7 +131,7 @@ public class SelectSortFragment extends Fragment implements View.OnClickListener
             comparator = comparator.reversed();
         }
 
-        mListener.sortToUsers(comparator, sortText);
+        mListener.sortToUsers(comparator, sortText); //pass a comparator and the corresponding text
     }
 
     public interface SelectSortListener {

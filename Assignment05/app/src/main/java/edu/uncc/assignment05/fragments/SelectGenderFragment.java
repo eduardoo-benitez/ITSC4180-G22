@@ -18,8 +18,8 @@ import edu.uncc.assignment05.models.Data;
 
 public class SelectGenderFragment extends Fragment {
     private String[] genders;
-    private ArrayAdapter<String> adapter;
-
+    private ArrayAdapter<String> adapter; //we need an adapter for each fragment that has a ListView that is to display an array. This one is a default.
+                                          //since it only holds a String.
     public SelectGenderFragment() {
         // Required empty public constructor
     }
@@ -39,7 +39,7 @@ public class SelectGenderFragment extends Fragment {
 
         genders = Data.genders;
 
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, genders);
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, genders); // initialize the declared adapter with the now populated array.
         binding.listView.setAdapter(adapter);
 
         binding.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
