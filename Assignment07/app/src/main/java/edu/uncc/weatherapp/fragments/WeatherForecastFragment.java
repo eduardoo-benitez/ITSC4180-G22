@@ -87,7 +87,7 @@ public class WeatherForecastFragment extends Fragment {
     public void getForecastUrl() {
         //TODO: Build a URL (with variables) that goes to a URL based on the city provided to make a GET request. EX: "https://api.weather.gov/points/{cityLat},{cityLng}"
         Request request = new Request.Builder()
-                .url("https://api.weather.gov/points/" + mCity.getLat() + "," +mCity.getLng())
+                .url("https://api.weather.gov/points/" + mCity.getLat() + "," + mCity.getLng())
                 .build();
         //TODO: Make a call with the above request that retrieves the "forecastURL" string within the "properties" object. onRun, pass that string result into getCityForecast()
         client.newCall(request).enqueue(new Callback() {
@@ -99,11 +99,11 @@ public class WeatherForecastFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    String body = response.body().string();
+                    String body = response.body().string(); //pull EVERYTHING @ the URL into a string named "body".
                     try {
-                        JSONObject jsonObject = new JSONObject(body);
-                        JSONObject properties = jsonObject.getJSONObject("properties");
-                        String forecastUrl = properties.getString("forecast");
+                        JSONObject jsonObject = new JSONObject(body); //convert the body string into a JSONObject (curly braces)
+                        JSONObject properties = jsonObject.getJSONObject("properties"); //pull the properties object from the jsonObject object (curly braces)
+                        String forecastUrl = properties.getString("forecast"); //pull the forecast string from the properties object
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

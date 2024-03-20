@@ -5,6 +5,7 @@ import org.json.JSONObject;
 public class Forecast {
     String startTime, tempUnit, windSpeed, iconUrl, shortForecast;
     Double temp, relativeHumid;
+
     //TODO: create forecast class with the data that we will be pulling from the API. If we use a constructor similar to the once in City (primitives), we will also need to create a Forecast object as we did the city object on line 103 of CitiesFragment. we can make the constructor take a JSONobject to avoid that.
     public Forecast(){
 

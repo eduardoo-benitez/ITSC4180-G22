@@ -12,6 +12,9 @@ import edu.uncc.weatherapp.fragments.CitiesFragment;
 
 public class MainActivity extends AppCompatActivity implements CitiesFragment.CitiesListener {
 
+    //in build.gradle.kts (Module :app):
+    //implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    //implementation("com.squareup.picasso:picasso:2.71828")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

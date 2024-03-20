@@ -107,6 +107,7 @@ public class CitiesFragment extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                //default adapter will just look at the .toString() of an object passed into it.
                                 adapter.notifyDataSetChanged();
                             }
                         });
