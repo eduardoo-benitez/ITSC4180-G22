@@ -12,6 +12,7 @@ import edu.uncc.weatherapp.fragments.CitiesFragment;
 
 public class MainActivity extends AppCompatActivity implements CitiesFragment.CitiesListener {
 
+    //<uses-permission android:name="android.permission.INTERNET"/> in line 4 of manifest
     //in build.gradle.kts (Module :app):
     //implementation("com.squareup.okhttp3:okhttp:4.9.0")
     //implementation("com.squareup.picasso:picasso:2.71828")
