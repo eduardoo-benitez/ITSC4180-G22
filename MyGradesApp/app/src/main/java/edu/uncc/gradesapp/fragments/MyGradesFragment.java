@@ -1,0 +1,172 @@
+package edu.uncc.gradesapp.fragments;
+
+import android.content.Context;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.local.QueryEngine;
+
+import java.util.ArrayList;
+
+import edu.uncc.gradesapp.R;
+import edu.uncc.gradesapp.databinding.FragmentMyGradesBinding;
+import edu.uncc.gradesapp.databinding.GradeRowItemBinding;
+import edu.uncc.gradesapp.models.Grade;
+
+public class MyGradesFragment extends Fragment {
+    public MyGradesFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if(item.getItemId() == R.id.action_add){
+            mListener.gotoAddGrade();
+            return true;
+        } else if(item.getItemId() == R.id.action_logout) {
+            mListener.logout();
+            return true;
+        } else if(item.getItemId() == R.id.action_reviews){
+            mListener.gotoViewReviews();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    FragmentMyGradesBinding binding;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentMyGradesBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    MyGradesAdapter myGradesAdapter;
+    ArrayList<Grade> mGrades = new ArrayList<>();
+    ListenerRegistration listenerRegistration;
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("My Grades");
+
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        myGradesAdapter = new MyGradesAdapter();
+        binding.recyclerView.setAdapter(myGradesAdapter);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        listenerRegistration = db.collection("grades").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w("A10", "Listen Failed", error);
+                    return;
+                }
+                mGrades.clear();
+                for (QueryDocumentSnapshot document: value) {
+                    Grade grade = document.toObject(Grade.class);
+                    if (mAuth.getCurrentUser().getUid().equals(grade.getCreatedByUId())) {
+                        mGrades.add(grade);
+                    }
+                }
+                myGradesAdapter.notifyDataSetChanged();
+            }
+        });
+
+        //TODO: Update the GPA and Hours header. Loop through mGrades?
+
+    }
+
+    MyGradesListener mListener;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        //try catch block
+        try {
+            mListener = (MyGradesListener) context;
+        } catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + " must implement MyGradesListener");
+        }
+    }
+
+    public interface MyGradesListener {
+        void gotoAddGrade();
+        void logout();
+        void gotoViewReviews();
+    }
+
+    class MyGradesAdapter extends RecyclerView.Adapter<MyGradesAdapter.MyGradesViewHolder> {
+        @NonNull
+        @Override
+        public MyGradesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            GradeRowItemBinding binding = GradeRowItemBinding.inflate(getLayoutInflater(), parent, false);
+            return new MyGradesViewHolder(binding);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull MyGradesViewHolder holder, int position) {
+            Grade grade = mGrades.get(position);
+            holder.setupUI(grade);
+        }
+
+        public int getItemCount() {
+            return mGrades.size();
+        }
+
+        class MyGradesViewHolder extends RecyclerView.ViewHolder {
+            GradeRowItemBinding mBinding;
+            Grade mGrade;
+
+            public MyGradesViewHolder(GradeRowItemBinding binding) {
+                super (binding.getRoot());
+                mBinding = binding;
+            }
+
+            public void setupUI(Grade grade) {
+                mGrade = grade;
+                mBinding.textViewCourseName.setText(grade.getCourseName().toString());
+                mBinding.textViewLetterGrade.setText(grade.getLetterGrade().toString());
+                mBinding.textViewCreditHours.setText(grade.getCreditHours().toString());
+                mBinding.textViewSemester.setText(grade.getSemester().toString());
+                mBinding.textViewCourseNumber.setText(grade.getCourseCode().toString());
+
+                //TODO: delete an entry from firebase.
+            }
+        }
+    }
+}
