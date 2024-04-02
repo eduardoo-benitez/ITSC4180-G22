@@ -108,6 +108,7 @@ public class AddGradeFragment extends Fragment {
                     data.put("semester", semesterText);
                     data.put("creditHours",  String.valueOf(selectedCourse.getHours()));
                     data.put("createdByUId", mAuth.getCurrentUser().getUid());
+                    data.put("docId", docRef.getId());
 
                     docRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

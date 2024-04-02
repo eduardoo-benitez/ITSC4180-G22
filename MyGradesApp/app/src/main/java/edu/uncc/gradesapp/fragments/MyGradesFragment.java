@@ -171,7 +171,7 @@ public class MyGradesFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            db.collection("grades").document(mGrade.getCourseCode()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            db.collection("grades").document(mGrade.getDocId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
 

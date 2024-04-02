@@ -1,9 +1,17 @@
 package edu.uncc.gradesapp.models;
 
 public class Grade {
-    public String letterGrade, courseName, courseNumber, semester, creditHours, createdByUId;
+    public String letterGrade, courseName, courseNumber, semester, creditHours, createdByUId, docId;
 
     public Grade() {}
+
+    public String getDocId() {
+        return docId;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
+    }
 
     public String getLetterGrade() {
         return letterGrade;
@@ -62,6 +70,7 @@ public class Grade {
                 ", semester='" + semester + '\'' +
                 ", creditHours='" + creditHours + '\'' +
                 ", createdByUId='" + createdByUId + '\'' +
+                ", docId='" + docId + '\'' +
                 '}';
     }
 }
