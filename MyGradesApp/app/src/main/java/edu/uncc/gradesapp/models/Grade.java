@@ -58,9 +58,10 @@ public class Grade {
         return "Grade{" +
                 "letterGrade='" + letterGrade + '\'' +
                 ", courseName='" + courseName + '\'' +
-                ", courseCode='" + courseNumber + '\'' +
+                ", courseNumber='" + courseNumber + '\'' +
                 ", semester='" + semester + '\'' +
                 ", creditHours='" + creditHours + '\'' +
+                ", createdByUId='" + createdByUId + '\'' +
                 '}';
     }
 }

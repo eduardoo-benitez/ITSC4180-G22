@@ -17,6 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -164,7 +166,24 @@ public class MyGradesFragment extends Fragment {
                 mBinding.textViewCreditHours.setText(grade.getCreditHours().toString());
                 mBinding.textViewSemester.setText(grade.getSemester().toString());
                 mBinding.textViewCourseNumber.setText(grade.getCourseCode().toString());
+                if (mAuth.getCurrentUser().getUid().equals(grade.getCreatedByUId())) {
+                    mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("grades").document(mGrade.getCourseCode()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
 
+                                }
+                            });
+                        }
+                    });
+                    mBinding.imageViewDelete.setVisibility(View.VISIBLE);
+                }
+                else {
+                    mBinding.imageViewDelete.setVisibility(View.INVISIBLE);
+                }
                 //TODO: delete an entry from firebase.
             }
         }
