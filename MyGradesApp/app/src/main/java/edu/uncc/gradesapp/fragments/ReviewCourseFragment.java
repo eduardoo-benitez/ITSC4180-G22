@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,18 +18,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 import edu.uncc.gradesapp.R;
 import edu.uncc.gradesapp.databinding.FragmentReviewCourseBinding;
 import edu.uncc.gradesapp.databinding.ReviewRowItemBinding;
 import edu.uncc.gradesapp.models.Course;
 import edu.uncc.gradesapp.models.CourseReview;
+import edu.uncc.gradesapp.models.Grade;
 import edu.uncc.gradesapp.models.Review;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -71,6 +89,8 @@ public class ReviewCourseFragment extends Fragment {
         return binding.getRoot();
     }
 
+    ListenerRegistration listenerRegistration;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -84,6 +104,26 @@ public class ReviewCourseFragment extends Fragment {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        listenerRegistration = db.collection("reviewCourse").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w("A10", "Listen Failed", error);
+                    return;
+                }
+                mReviews.clear();
+                for (QueryDocumentSnapshot document: value) {
+                    Review review = document.toObject(Review.class);
+                    if (review.getCourse().equals(binding.textViewCourseNumber.getText().toString())) {
+                        mReviews.add(review);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         binding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +132,23 @@ public class ReviewCourseFragment extends Fragment {
                     Toast.makeText(getActivity(), "Review cannot be empty", Toast.LENGTH_SHORT).show();
                 } else {
 
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    DocumentReference docRef = db.collection("reviewCourse").document();
+
+                    HashMap<String, Object> data = new HashMap<>();
+                    data.put("createdAt", FieldValue.serverTimestamp());
+                    data.put("createdByName", mAuth.getCurrentUser().getDisplayName());
+                    data.put("postText", reviewText);
+                    data.put("course", binding.textViewCourseNumber.getText().toString());
+
+                    docRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -129,6 +186,17 @@ public class ReviewCourseFragment extends Fragment {
 
             private void setupUI(Review review){
                 this.mReview = review;
+
+                itemBinding.textViewReview.setText(review.getReview());
+                itemBinding.textViewUserName.setText(review.getAuthor());
+
+                if (review.getCreatedAt() == null) {
+                    itemBinding.textViewCreatedAt.setText("N/A");
+                } else {
+                    Date date = review.getCreatedAt().toDate();
+                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+                    itemBinding.textViewCreatedAt.setText(sdf.format(date));
+                }
             }
         }
     }
