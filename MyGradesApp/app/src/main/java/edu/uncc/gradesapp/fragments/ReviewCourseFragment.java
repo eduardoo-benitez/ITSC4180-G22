@@ -140,6 +140,8 @@ public class ReviewCourseFragment extends Fragment {
                     data.put("createdByName", mAuth.getCurrentUser().getDisplayName());
                     data.put("postText", reviewText);
                     data.put("course", binding.textViewCourseNumber.getText().toString());
+                    data.put("createdByUId", mAuth.getCurrentUser().getUid());
+                    data.put("docId", docRef.getId());
 
                     docRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -153,8 +155,6 @@ public class ReviewCourseFragment extends Fragment {
             }
         });
     }
-
-
 
     class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewViewHolder> {
         @NonNull
@@ -185,18 +185,38 @@ public class ReviewCourseFragment extends Fragment {
 
 
             private void setupUI(Review review){
-                this.mReview = review;
+                mReview = review;
 
-                itemBinding.textViewReview.setText(review.getReview());
-                itemBinding.textViewUserName.setText(review.getAuthor());
+                itemBinding.textViewReview.setText(review.getPostText());
+                itemBinding.textViewUserName.setText(review.getCreatedByName());
 
                 if (review.getCreatedAt() == null) {
                     itemBinding.textViewCreatedAt.setText("N/A");
                 } else {
-                    Date date = review.getCreatedAt().toDate();
+                    Date date = this.mReview.getCreatedAt().toDate();
                     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
                     itemBinding.textViewCreatedAt.setText(sdf.format(date));
                 }
+
+                if (mAuth.getCurrentUser().getUid().equals(mReview.getCreatedByUId())) {
+                    itemBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("reviewCourse").document(mReview.getDocId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                }
+                            });
+                        }
+                    });
+                    itemBinding.imageViewDelete.setVisibility(View.VISIBLE);
+                }
+                else {
+                    itemBinding.imageViewDelete.setVisibility(View.INVISIBLE);
+                }
+
             }
         }
     }

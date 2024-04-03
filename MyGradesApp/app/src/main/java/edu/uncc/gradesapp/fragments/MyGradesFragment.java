@@ -80,10 +80,15 @@ public class MyGradesFragment extends Fragment {
     MyGradesAdapter myGradesAdapter;
     ArrayList<Grade> mGrades = new ArrayList<>();
     ListenerRegistration listenerRegistration;
+    int totalHours = 0;
+    String gpaString = "";
+    double totalGPA = 0;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("My Grades");
+
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         myGradesAdapter = new MyGradesAdapter();
@@ -103,14 +108,33 @@ public class MyGradesFragment extends Fragment {
                     Grade grade = document.toObject(Grade.class);
                     if (mAuth.getCurrentUser().getUid().equals(grade.getCreatedByUId())) {
                         mGrades.add(grade);
+                        totalHours += Integer.parseInt(grade.getCreditHours().substring(0, grade.getCreditHours().length() - 2));
+                        gpaString += grade.getLetterGrade();
                     }
                 }
+                for (char c: gpaString.toCharArray()) {
+                    switch (c) {
+                        case 'A':
+                            totalGPA += 4;
+                            break;
+                        case 'B':
+                            totalGPA += 3;
+                            break;
+                        case 'C':
+                            totalGPA += 2;
+                            break;
+                        case 'D':
+                            totalGPA += 1;
+                            break;
+                    }
+                }
+                totalGPA = totalGPA/totalHours;
+                binding.textViewHours.setText("Hours: " + totalHours + ".0");
+                binding.textViewGPA.setText("GPA: " + totalGPA);
+
                 myGradesAdapter.notifyDataSetChanged();
             }
         });
-
-        //TODO: Update the GPA and Hours header. Loop through mGrades?
-
     }
 
     MyGradesListener mListener;

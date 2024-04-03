@@ -2,23 +2,23 @@ package edu.uncc.gradesapp.models;
 
 import com.google.firebase.Timestamp;
 public class Review {
-    String postText, author, course;
+    String postText, createdByName, course, createdByUId, docId;
     Timestamp createdAt;
 
-    public String getReview() {
+    public String getPostText() {
         return postText;
     }
 
-    public void setReview(String postText) {
+    public void setPostText(String postText) {
         this.postText = postText;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getCreatedByName() {
+        return createdByName;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setCreatedByName(String createdByName) {
+        this.createdByName = createdByName;
     }
 
     public String getCourse() {
@@ -27,6 +27,22 @@ public class Review {
 
     public void setCourse(String course) {
         this.course = course;
+    }
+
+    public String getCreatedByUId() {
+        return createdByUId;
+    }
+
+    public void setCreatedByUId(String createdByUId) {
+        this.createdByUId = createdByUId;
+    }
+
+    public String getDocId() {
+        return docId;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
     }
 
     public Timestamp getCreatedAt() {
@@ -39,10 +55,12 @@ public class Review {
 
     @Override
     public String toString() {
-        return "CourseReview{" +
+        return "Review{" +
                 "postText='" + postText + '\'' +
-                ", author='" + author + '\'' +
+                ", createdByName='" + createdByName + '\'' +
                 ", course='" + course + '\'' +
+                ", createdByUId='" + createdByUId + '\'' +
+                ", docId='" + docId + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
     }
