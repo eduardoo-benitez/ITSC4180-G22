@@ -89,7 +89,6 @@ public class MyGradesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("My Grades");
 
-
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         myGradesAdapter = new MyGradesAdapter();
         binding.recyclerView.setAdapter(myGradesAdapter);
@@ -104,6 +103,9 @@ public class MyGradesFragment extends Fragment {
                     return;
                 }
                 mGrades.clear();
+                totalHours = 0;
+                gpaString = "";
+                totalGPA = 0;
                 for (QueryDocumentSnapshot document: value) {
                     Grade grade = document.toObject(Grade.class);
                     if (mAuth.getCurrentUser().getUid().equals(grade.getCreatedByUId())) {
