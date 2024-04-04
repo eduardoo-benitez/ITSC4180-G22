@@ -110,8 +110,11 @@ public class MyGradesFragment extends Fragment {
                     Grade grade = document.toObject(Grade.class);
                     if (mAuth.getCurrentUser().getUid().equals(grade.getCreatedByUId())) {
                         mGrades.add(grade);
-                        totalHours += Integer.parseInt(grade.getCreditHours().substring(0, grade.getCreditHours().length() - 2));
-                        gpaString += grade.getLetterGrade();
+                        int hours = Integer.parseInt(grade.getCreditHours().substring(0, grade.getCreditHours().length() - 2));
+                        totalHours += hours;
+                        for (int i = 0; i < hours; i++) {
+                            gpaString += grade.getLetterGrade();
+                        }
                     }
                 }
                 for (char c: gpaString.toCharArray()) {
@@ -130,9 +133,14 @@ public class MyGradesFragment extends Fragment {
                             break;
                     }
                 }
-                totalGPA = totalGPA/totalHours;
+                if (totalHours != 0) {
+                    totalGPA = totalGPA/totalHours;
+                }
+                else {
+                    totalGPA = 0;
+                }
                 binding.textViewHours.setText("Hours: " + totalHours + ".0");
-                binding.textViewGPA.setText("GPA: " + totalGPA);
+                binding.textViewGPA.setText(String.format("GPA: %.2f", totalGPA));
 
                 myGradesAdapter.notifyDataSetChanged();
             }

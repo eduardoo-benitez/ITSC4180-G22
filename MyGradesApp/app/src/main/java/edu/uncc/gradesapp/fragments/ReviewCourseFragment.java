@@ -98,7 +98,7 @@ public class ReviewCourseFragment extends Fragment {
 
         binding.textViewCourseName.setText(mCourse.getName());
         binding.textViewCourseNumber.setText(mCourse.getNumber());
-        binding.textViewCreditHours.setText(String.valueOf(mCourse.getHours()) + " Credit Hours");
+        binding.textViewCreditHours.setText(mCourse.getHours() + " Credit Hours");
 
         adapter = new ReviewsAdapter();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
