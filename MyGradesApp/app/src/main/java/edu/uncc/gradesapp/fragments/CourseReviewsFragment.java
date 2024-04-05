@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,12 +18,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import edu.uncc.gradesapp.R;
 import edu.uncc.gradesapp.databinding.CourseReviewRowItemBinding;
@@ -52,12 +69,14 @@ public class CourseReviewsFragment extends Fragment {
     ArrayList<Course> mCourses = new ArrayList<>();
     CourseReviewsAdapter adapter;
 
+    ListenerRegistration listenerRegistration;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCourseReviewsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -67,6 +86,22 @@ public class CourseReviewsFragment extends Fragment {
         binding.recyclerView.setAdapter(adapter);
 
         getCourses();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        listenerRegistration = db.collection("courseReview").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.w("A10", "Listen Failed", error);
+                    return;
+                }
+                for (QueryDocumentSnapshot document: value) {
+                    CourseReview courseReview = document.toObject(CourseReview.class);
+                    mCourseReviews.add(courseReview);
+                }
+            }
+        });
+
     }
 
     private final OkHttpClient client = new OkHttpClient();
@@ -156,6 +191,72 @@ public class CourseReviewsFragment extends Fragment {
                 itemBinding.textViewCreditHours.setText(course.getHours() + " Credit Hours");
                 itemBinding.textViewCourseNumber.setText(course.getNumber());
 
+                for (CourseReview cr: mCourseReviews) {
+                    if (course.getNumber().equals(cr.getCourse())) {
+                        if (cr.getNumReviews() != null) {
+                            itemBinding.textViewCourseReviews.setText(cr.getNumReviews() + " Reviews");
+                        }
+                        else {
+                            itemBinding.textViewCourseReviews.setText("0 Reviews");
+                        }
+                        if (cr.getFavoredBy().contains(mAuth.getCurrentUser().getUid())) {
+                            itemBinding.imageViewHeart.setImageResource(R.drawable.ic_heart_full);
+                        }
+                        else {
+                            itemBinding.imageViewHeart.setImageResource(R.drawable.ic_heart_empty);
+                        }
+                    }
+                }
+                itemBinding.imageViewHeart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        String userId = mAuth.getCurrentUser().getUid();
+
+                        boolean isFavored = false;
+                        for (CourseReview cr: mCourseReviews) {
+                            if (mCourse.getNumber().equals(cr.getCourse())) {
+                                if (cr.getFavoredBy().contains(userId)) {
+                                    isFavored = true;
+                                }
+                            }
+                        }
+
+                        if (isFavored) {
+                            itemBinding.imageViewHeart.setImageResource(R.drawable.ic_heart_empty);
+                            for (CourseReview cr: mCourseReviews) {
+                                if (mCourse.getNumber().equals(cr.getCourse())) {
+                                    List<String> favoredBy = cr.getFavoredBy();
+                                    favoredBy.remove(userId);
+                                    db.collection("courseReview").document(cr.getDocId()).update("favoredBy", favoredBy);
+                                }
+                            }
+                        }
+                        else {
+                            itemBinding.imageViewHeart.setImageResource(R.drawable.ic_heart_full);
+                            boolean courseExists = false;
+                            for (CourseReview cr : mCourseReviews) {
+                                if (mCourse.getNumber().equals(cr.getCourse())) {
+                                    courseExists = true;
+                                    List<String> favoredBy = cr.getFavoredBy();
+                                    favoredBy.add(userId);
+                                    db.collection("courseReview").document(cr.getDocId()).update("favoredBy", favoredBy);
+                                }
+                            }
+                            if (!courseExists) {
+                                DocumentReference docRef = db.collection("courseReview").document();
+                                Map<String, Object> data = new HashMap<>();
+                                List<String> favoredBy = new ArrayList<>();
+                                favoredBy.add(userId);
+                                data.put("course", mCourse.getNumber());
+                                data.put("favoredBy", favoredBy);
+                                data.put("reviews", 0);
+                                data.put("docId", docRef.getId());
+                                docRef.set(data);
+                            }
+                        }
+                    }
+                });
             }
         }
     }
