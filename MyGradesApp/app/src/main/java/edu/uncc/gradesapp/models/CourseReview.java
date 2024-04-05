@@ -1,11 +1,11 @@
 package edu.uncc.gradesapp.models;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class CourseReview {
     String course, docId;
-    Long numReviews;
-    List<String> favoredBy;
+    int numReviews;
+    ArrayList<String> favoredBy;
 
     public String getCourse() {
         return course;
@@ -23,19 +23,19 @@ public class CourseReview {
         this.docId = docId;
     }
 
-    public Long getNumReviews() {
+    public int getNumReviews() {
         return numReviews;
     }
 
-    public void setNumReviews(Long numReviews) {
+    public void setNumReviews(int numReviews) {
         this.numReviews = numReviews;
     }
 
-    public List<String> getFavoredBy() {
+    public ArrayList<String> getFavoredBy() {
         return favoredBy;
     }
 
-    public void setFavoredBy(List<String> favoredBy) {
+    public void setFavoredBy(ArrayList<String> favoredBy) {
         this.favoredBy = favoredBy;
     }
 

@@ -193,12 +193,7 @@ public class CourseReviewsFragment extends Fragment {
 
                 for (CourseReview cr: mCourseReviews) {
                     if (course.getNumber().equals(cr.getCourse())) {
-                        if (cr.getNumReviews() != null) {
-                            itemBinding.textViewCourseReviews.setText(cr.getNumReviews() + " Reviews");
-                        }
-                        else {
-                            itemBinding.textViewCourseReviews.setText("0 Reviews");
-                        }
+                        itemBinding.textViewCourseReviews.setText(cr.getNumReviews() + " Reviews");
                         if (cr.getFavoredBy().contains(mAuth.getCurrentUser().getUid())) {
                             itemBinding.imageViewHeart.setImageResource(R.drawable.ic_heart_full);
                         }
