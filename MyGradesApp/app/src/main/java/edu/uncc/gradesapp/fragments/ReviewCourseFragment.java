@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,6 +42,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import edu.uncc.gradesapp.R;
 import edu.uncc.gradesapp.databinding.FragmentReviewCourseBinding;
@@ -147,6 +151,7 @@ public class ReviewCourseFragment extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+                                changeNumReviews(1);
                                 adapter.notifyDataSetChanged();
                             }
                         }
@@ -155,6 +160,39 @@ public class ReviewCourseFragment extends Fragment {
             }
         });
     }
+
+    private void changeNumReviews(int inc) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("courseReview")
+                .whereEqualTo("course", mCourse.getNumber())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult() != null && !(task.getResult().isEmpty())) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String documentId = document.getId();
+                                    DocumentReference courseRef = db.collection("courseReview").document(documentId);
+                                    courseRef.update("numReviews", FieldValue.increment(inc));
+                                }
+                            }
+                            else {
+                                DocumentReference docRef = db.collection("courseReview").document();
+                                Map<String, Object> data = new HashMap<>();
+                                List<String> favoredBy = new ArrayList<>();
+                                data.put("course", mCourse.getNumber());
+                                data.put("favoredBy", favoredBy);
+                                data.put("numReviews", 1);
+                                data.put("docId", docRef.getId());
+                                docRef.set(data);
+                                db.collection("courseReview").document().set(data);
+                            }
+                        }
+                    }
+                });
+    }
+
 
     class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewViewHolder> {
         @NonNull
@@ -206,7 +244,7 @@ public class ReviewCourseFragment extends Fragment {
                             db.collection("reviewCourse").document(mReview.getDocId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-
+                                    changeNumReviews(-1);
                                 }
                             });
                         }
