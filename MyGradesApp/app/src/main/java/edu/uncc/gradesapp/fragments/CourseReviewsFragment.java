@@ -245,7 +245,7 @@ public class CourseReviewsFragment extends Fragment {
                                 favoredBy.add(userId);
                                 data.put("course", mCourse.getNumber());
                                 data.put("favoredBy", favoredBy);
-                                data.put("reviews", 0);
+                                data.put("numReviews", 0);
                                 data.put("docId", docRef.getId());
                                 docRef.set(data);
                             }

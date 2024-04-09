@@ -186,7 +186,6 @@ public class ReviewCourseFragment extends Fragment {
                                 data.put("numReviews", 1);
                                 data.put("docId", docRef.getId());
                                 docRef.set(data);
-                                db.collection("courseReview").document().set(data);
                             }
                         }
                     }
