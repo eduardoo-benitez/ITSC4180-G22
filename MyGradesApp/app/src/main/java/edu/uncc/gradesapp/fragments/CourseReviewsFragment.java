@@ -65,10 +65,13 @@ public class CourseReviewsFragment extends Fragment {
     }
 
     FragmentCourseReviewsBinding binding;
+    //holds data for each course, but the data is retrieved from FirebaseFirestore (number, favoredBy, numReviews).
     ArrayList<CourseReview> mCourseReviews = new ArrayList<>();
+    //holds data for each course, retrieved via API. (name, creditHours, number, courseId)
     ArrayList<Course> mCourses = new ArrayList<>();
     CourseReviewsAdapter adapter;
 
+    //necessary for when we need to populate the arraylist on line 97.
     ListenerRegistration listenerRegistration;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,9 +88,12 @@ public class CourseReviewsFragment extends Fragment {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
 
+        //API call to initialize all the course information in mCourses.
         getCourses();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        //FirebaseFirestore call to initialize course information in mCourseReview
         listenerRegistration = db.collection("courseReview").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -101,7 +107,6 @@ public class CourseReviewsFragment extends Fragment {
                 }
             }
         });
-
     }
 
     private final OkHttpClient client = new OkHttpClient();
@@ -152,6 +157,7 @@ public class CourseReviewsFragment extends Fragment {
 
     }
 
+    //RecyclerView for displaying course information. Is set to use mCourses for each of its rows.
     class CourseReviewsAdapter extends RecyclerView.Adapter<CourseReviewsAdapter.CourseReviewsViewHolder> {
 
         @NonNull
@@ -191,6 +197,10 @@ public class CourseReviewsFragment extends Fragment {
                 itemBinding.textViewCreditHours.setText(course.getHours() + " Credit Hours");
                 itemBinding.textViewCourseNumber.setText(course.getNumber());
 
+                //since RecyclerViews setup their UI row-wise there is a single object within the mCourse array selected each time the code
+                //in setupUI is run. (line 195) we can loop through the mCourseReviews array to find a CourseReview with a matching course id.
+                //if a matching id is found, we then check to see if the current user, found through mAuth.getCurrentUser().getUid(), is present
+                //within the favoredBy array field of the CourseReview object. If it is, we initialize the heart to full, otherwise it is empty.
                 for (CourseReview cr: mCourseReviews) {
                     if (course.getNumber().equals(cr.getCourse())) {
                         itemBinding.textViewCourseReviews.setText(cr.getNumReviews() + " Reviews");
@@ -208,6 +218,9 @@ public class CourseReviewsFragment extends Fragment {
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         String userId = mAuth.getCurrentUser().getUid();
 
+                        //first we check if a user (again, found through mAuth.getCurrentUser().getUid(), which in this case is
+                        //set to the userId string above) is present within the CourseReview object that has a matching course id
+                        //with the currently selected course object. If a user is present we set a flag to true.
                         boolean isFavored = false;
                         for (CourseReview cr: mCourseReviews) {
                             if (mCourse.getNumber().equals(cr.getCourse())) {
@@ -217,6 +230,12 @@ public class CourseReviewsFragment extends Fragment {
                             }
                         }
 
+                        //if the flag is true, after the user presses it, the image resource is set to empty and we once again find the CourseReview object
+                        //matching the active course. We set a new List object (this is the datatype that FirebaseFirestore likes for arrays) to the selected CourseReview objects
+                        //favoredBy field. We reflect the change we want to happen in FirebaseFirestore (removing the selected user) here. We then reference the
+                        //the correct document within the collection courseReview by retrieving the docId of the CourseReview object with the course id
+                        //matching the selected course. Note the usage of update (not set) and the arguments: the field name in FirebaseFirestore, and the thing we need that field to be
+                        //(the List object we made and updated earlier).
                         if (isFavored) {
                             itemBinding.imageViewHeart.setImageResource(R.drawable.ic_heart_empty);
                             for (CourseReview cr: mCourseReviews) {
@@ -227,6 +246,7 @@ public class CourseReviewsFragment extends Fragment {
                                 }
                             }
                         }
+                        //if the flag is false, we do the same thing as above, but we add the user instead of removing it.
                         else {
                             itemBinding.imageViewHeart.setImageResource(R.drawable.ic_heart_full);
                             boolean courseExists = false;
@@ -238,6 +258,11 @@ public class CourseReviewsFragment extends Fragment {
                                     db.collection("courseReview").document(cr.getDocId()).update("favoredBy", favoredBy);
                                 }
                             }
+                            //there may not be a document for all courses within the CourseReview collection
+                            //so we need to make sure we create a document in the case that there is not one.
+                            //this happens when a heart is clicked of a course that does not have a document in courseReviews.
+                            //this means that the course cannot have anything in the favoredBy array when we click it, so we need to
+                            //add the logged in user to the List and then initialize the values of the new document.
                             if (!courseExists) {
                                 DocumentReference docRef = db.collection("courseReview").document();
                                 Map<String, Object> data = new HashMap<>();

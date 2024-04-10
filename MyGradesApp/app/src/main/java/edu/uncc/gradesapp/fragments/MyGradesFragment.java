@@ -95,6 +95,7 @@ public class MyGradesFragment extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        //FirebaseFirestore call to initialize grade information in mGrades.
         listenerRegistration = db.collection("grades").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -108,15 +109,24 @@ public class MyGradesFragment extends Fragment {
                 totalGPA = 0;
                 for (QueryDocumentSnapshot document: value) {
                     Grade grade = document.toObject(Grade.class);
+                    //Only adds to grades if the grade object retreived from the grades collection has a user id that matches the logged in user.
                     if (mAuth.getCurrentUser().getUid().equals(grade.getCreatedByUId())) {
                         mGrades.add(grade);
+                        //adds hours to a variable. Must parse an int from a string and remove the .00 at the end.
                         int hours = Integer.parseInt(grade.getCreditHours().substring(0, grade.getCreditHours().length() - 2));
+                        //increments totalHours by the above
                         totalHours += hours;
+                        //very scuffed.
+                        //takes the letter grade and adds it to a gpa string. This is done once for each credit hour a class is worth.
+                        //If you have two classes, one worth 3 credits with an A and another worth 4 with a B, the final GPA string would be:
+                        //AAABBBB
                         for (int i = 0; i < hours; i++) {
                             gpaString += grade.getLetterGrade();
                         }
                     }
                 }
+                //for each char in the gpaString, the totalGPA is incremented depending on the values.
+                //for the above example, AAABBBB -> 4+4+4+3+3+3+3
                 for (char c: gpaString.toCharArray()) {
                     switch (c) {
                         case 'A':
@@ -133,6 +143,9 @@ public class MyGradesFragment extends Fragment {
                             break;
                     }
                 }
+                //divide the total by total credit hours
+                //(4+4+4+3+3+3+3)/7
+                //only divided if credit hours is not 0 ofc
                 if (totalHours != 0) {
                     totalGPA = totalGPA/totalHours;
                 }
@@ -200,6 +213,7 @@ public class MyGradesFragment extends Fragment {
                 mBinding.textViewCreditHours.setText(grade.getCreditHours().toString());
                 mBinding.textViewSemester.setText(grade.getSemester().toString());
                 mBinding.textViewCourseNumber.setText(grade.getCourseCode().toString());
+                //if the active user is the owner of grade on the current row, enable them to delete it by displaying the image.
                 if (mAuth.getCurrentUser().getUid().equals(grade.getCreatedByUId())) {
                     mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -218,7 +232,6 @@ public class MyGradesFragment extends Fragment {
                 else {
                     mBinding.imageViewDelete.setVisibility(View.INVISIBLE);
                 }
-                //TODO: delete an entry from firebase.
             }
         }
     }

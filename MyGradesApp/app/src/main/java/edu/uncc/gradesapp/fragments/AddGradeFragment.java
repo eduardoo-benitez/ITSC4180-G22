@@ -41,6 +41,7 @@ public class AddGradeFragment extends Fragment {
         binding = FragmentAddGradeBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+    //Retrieves the FirebaseAuth instance of the current project, GradesApp, so we can use .getCurrentUser().getUid()
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -90,7 +91,6 @@ public class AddGradeFragment extends Fragment {
         binding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: update firestore with the new grade, also make sure that no fields are empty.
                 String semesterText = binding.textViewSemester.getText().toString();
                 String courseText = binding.textViewCourse.getText().toString();
                 String gradeText = binding.textViewGrade.getText().toString();
@@ -98,9 +98,15 @@ public class AddGradeFragment extends Fragment {
                     Toast.makeText(getActivity(), "Please fill in all the available fields", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    //Retrieves the FirebaseFirestore instance so we can manipulate collections/documents
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    //DocumentReference is an object that is used to point to a specific, document.
+                    //As such, in db.collection().document() the collection argument is the name of the collection and
+                    //the document argument is the docId of the document within that collection we want to reference. In this case however,
+                    //we are leaving the argument of document empty. This causes a new document with a random docId to be
+                    //created, instead of referencing an existing one.
                     DocumentReference docRef = db.collection("grades").document();
-
+                    //a hash map that maps the name of a document field to a value we can retrieve with code. Can even be hardcoded values.
                     HashMap<String, Object> data = new HashMap<>();
                     data.put("letterGrade", gradeText);
                     data.put("courseName", selectedCourse.getName().toString());

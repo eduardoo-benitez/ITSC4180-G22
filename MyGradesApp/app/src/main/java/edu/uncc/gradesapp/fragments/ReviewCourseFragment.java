@@ -110,6 +110,7 @@ public class ReviewCourseFragment extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        //FirebaseFirestore call to initialize reviewCourse information in mReviews.
         listenerRegistration = db.collection("reviewCourse").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -120,6 +121,7 @@ public class ReviewCourseFragment extends Fragment {
                 mReviews.clear();
                 for (QueryDocumentSnapshot document: value) {
                     Review review = document.toObject(Review.class);
+                    //only add a review to mReviews if it matches the course that a user selected.
                     if (review.getCourse().equals(binding.textViewCourseNumber.getText().toString())) {
                         mReviews.add(review);
                     }
@@ -139,6 +141,7 @@ public class ReviewCourseFragment extends Fragment {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     DocumentReference docRef = db.collection("reviewCourse").document();
 
+                    //a hash map that maps the name of a document field to a value we can retrieve with code. Can even be hardcoded values.
                     HashMap<String, Object> data = new HashMap<>();
                     data.put("createdAt", FieldValue.serverTimestamp());
                     data.put("createdByName", mAuth.getCurrentUser().getDisplayName());
@@ -150,6 +153,8 @@ public class ReviewCourseFragment extends Fragment {
                     docRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
+                            //when a review is successfully submitted, we call changeNumReviews(1). This will increment the numReviews field
+                            //of the correct courseReview by 1.
                             if (task.isSuccessful()) {
                                 changeNumReviews(1);
                                 adapter.notifyDataSetChanged();
@@ -163,6 +168,8 @@ public class ReviewCourseFragment extends Fragment {
 
     private void changeNumReviews(int inc) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //finds the specific courseReview document that has a course field that equals the course that we just wrote a review for/deleted's
+        //course number. (we were not taught this)
         db.collection("courseReview")
                 .whereEqualTo("course", mCourse.getNumber())
                 .get()
@@ -170,6 +177,9 @@ public class ReviewCourseFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            //if the query is successful and is not empty, we look through the "task" received (basically a collection with only documents that fit our
+                            //criteria defined in the query) and for each document, we simply update the numReviews filed with an increment.
+                            //There shold be only one document in each "task" since there should only be one course with a given course number.
                             if (task.getResult() != null && !(task.getResult().isEmpty())) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     String documentId = document.getId();
@@ -177,6 +187,10 @@ public class ReviewCourseFragment extends Fragment {
                                     courseRef.update("numReviews", FieldValue.increment(inc));
                                 }
                             }
+                            //if the query is not successful, meaning there is no courseReview document for the course we just reviewed,
+                            //we must make a new one. Similar to what we do at the bottom CourseReview, except we initialize numReviews to 1.
+                            //this should ONLY happen when there are no reviews for a course so this will never execute if we are trying to delete a review,
+                            //since it needs to be there for us to delete it in the first place, hence the initialization to 1.
                             else {
                                 DocumentReference docRef = db.collection("courseReview").document();
                                 Map<String, Object> data = new HashMap<>();
@@ -227,6 +241,9 @@ public class ReviewCourseFragment extends Fragment {
                 itemBinding.textViewReview.setText(review.getPostText());
                 itemBinding.textViewUserName.setText(review.getCreatedByName());
 
+                //do the below when we need to display a date in a textview. we have to do this
+                //because the getCreatedAt should be of a weird date datatype in order to satisfy FirebaseFirestore,
+                //see Review model.
                 if (review.getCreatedAt() == null) {
                     itemBinding.textViewCreatedAt.setText("N/A");
                 } else {
@@ -235,6 +252,7 @@ public class ReviewCourseFragment extends Fragment {
                     itemBinding.textViewCreatedAt.setText(sdf.format(date));
                 }
 
+                //if the currentyl logged in user is the author of a review, we may display the trashcan icon.
                 if (mAuth.getCurrentUser().getUid().equals(mReview.getCreatedByUId())) {
                     itemBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -243,6 +261,8 @@ public class ReviewCourseFragment extends Fragment {
                             db.collection("reviewCourse").document(mReview.getDocId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
+                                    //when a trash can icon is pressed and a review is successfully deleted from reviewCourse, we call changeNumReviews(-1) on line 169
+                                    //in order to decrement the numReviews in the correct courseReview document.
                                     changeNumReviews(-1);
                                 }
                             });

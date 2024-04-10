@@ -20,6 +20,30 @@ import edu.uncc.gradesapp.models.CourseReview;
 import edu.uncc.gradesapp.models.LetterGrade;
 import edu.uncc.gradesapp.models.Semester;
 
+//Select*Fragment are left uncommented since we were provided those and they are mainly just dealing with
+//the data from the API calls.
+//When drag and dropping the google-services.json file press the drop down
+//that says Android in the top left and choose Project. From there drag and drop the .json into the app dir.
+//Make sure the correct things are imported in the build.grade.kts files and note which is which, since there are two.
+//Firebase should tell you but I think these should be what you need:
+
+//for build.grade.kts (Module :app):
+    //plugins {
+    //        id("com.android.application")
+    //        id("com.google.gms.google-services")
+    //        }
+    //dependencies {
+    //        ...
+    //        implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    //        implementation("com.google.firebase:firebase-firestore")
+    //        implementation("com.google.firebase:firebase-auth")
+    //        }
+//for build.grade.kts (Project :GradesApp):
+    //plugins {
+    //        ...
+    //        id("com.google.gms.google-services") version "4.4.1" apply false
+    //        }
+
 public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener,
         SignUpFragment.SignUpListener, MyGradesFragment.MyGradesListener, AddGradeFragment.AddGradeListener,
         SelectLetterGradeFragment.LetterGradeListener, SelectSemesterFragment.SemestersListener, SelectCourseFragment.CoursesListener,
