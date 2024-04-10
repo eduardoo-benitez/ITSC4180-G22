@@ -183,6 +183,7 @@ public class CourseReviewsFragment extends Fragment {
             public CourseReviewsViewHolder(CourseReviewRowItemBinding itemBinding) {
                 super(itemBinding.getRoot());
                 this.itemBinding = itemBinding;
+                //on click of an item, go to it's review page
                 this.itemBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -198,7 +199,7 @@ public class CourseReviewsFragment extends Fragment {
                 itemBinding.textViewCourseNumber.setText(course.getNumber());
 
                 //since RecyclerViews setup their UI row-wise there is a single object within the mCourse array selected each time the code
-                //in setupUI is run. (line 195) we can loop through the mCourseReviews array to find a CourseReview with a matching course id.
+                //in setupUI is run. (line 195) we can loop through the mCourseReviews array to find a CourseReview with a course id matching the course on the current row.
                 //if a matching id is found, we then check to see if the current user, found through mAuth.getCurrentUser().getUid(), is present
                 //within the favoredBy array field of the CourseReview object. If it is, we initialize the heart to full, otherwise it is empty.
                 for (CourseReview cr: mCourseReviews) {

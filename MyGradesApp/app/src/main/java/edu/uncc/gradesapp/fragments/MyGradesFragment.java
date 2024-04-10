@@ -103,10 +103,12 @@ public class MyGradesFragment extends Fragment {
                     Log.w("A10", "Listen Failed", error);
                     return;
                 }
+                //reset the below variables each time the collection changes in order to update them correctly
                 mGrades.clear();
                 totalHours = 0;
                 gpaString = "";
                 totalGPA = 0;
+                //loops through each document inside of of the collection.
                 for (QueryDocumentSnapshot document: value) {
                     Grade grade = document.toObject(Grade.class);
                     //Only adds to grades if the grade object retreived from the grades collection has a user id that matches the logged in user.

@@ -116,6 +116,7 @@ public class AddGradeFragment extends Fragment {
                     data.put("createdByUId", mAuth.getCurrentUser().getUid());
                     data.put("docId", docRef.getId());
 
+                    //using set overwrites whatever may already be in the document we are referencing.
                     docRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
