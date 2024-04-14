@@ -46,7 +46,8 @@
         android:layout_marginEnd="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mailboxTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/mailboxTitle"
+        tools:listitem="@layout/mailbox_row_item" />
 
     <Button
         android:id="@+id/buttonLogout"

@@ -10,7 +10,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import edu.uncc.assignment11.auth.LoginFragment;
 import edu.uncc.assignment11.auth.RegisterFragment;
 
-public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, RegisterFragment.RegisterListener, MailboxFragment.MailboxListener {
+public class MainActivity extends AppCompatActivity implements
+        LoginFragment.LoginListener, RegisterFragment.RegisterListener, MailboxFragment.MailboxListener,
+        NewMessageFragment.NewMessageListener {
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
@@ -57,5 +59,34 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.containerView, new LoginFragment())
                 .commit();
+    }
+
+    @Override
+    public void goToNewMessage() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.containerView, new NewMessageFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void goToUserList() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.containerView, new UserListFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void goToReply() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.containerView, new ReplyFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void back() {
+        getSupportFragmentManager().popBackStack();
     }
 }
