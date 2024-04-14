@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 
 import edu.uncc.assignment11.auth.LoginFragment;
@@ -12,7 +11,7 @@ import edu.uncc.assignment11.auth.RegisterFragment;
 
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.LoginListener, RegisterFragment.RegisterListener, MailboxFragment.MailboxListener,
-        NewMessageFragment.NewMessageListener {
+        NewMessageFragment.NewMessageListener, UserListFragment.UserListListener, ReplyFragment.ReplyListener {
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override

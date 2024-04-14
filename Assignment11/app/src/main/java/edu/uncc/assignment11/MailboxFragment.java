@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
-import edu.uncc.assignment11.databinding.FragmentLoginBinding;
 import edu.uncc.assignment11.databinding.FragmentMailboxBinding;
 import edu.uncc.assignment11.databinding.MailboxRowItemBinding;
 import edu.uncc.assignment11.models.Message;
@@ -37,10 +37,15 @@ public class MailboxFragment extends Fragment {
     }
 
     MailboxAdapter mailboxAdapter;
-    ArrayList<Message> mMessages = new ArrayList<Message>();
+    ArrayList<Message> mMessages = new ArrayList<>();
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        binding.mailboxRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mailboxAdapter = new MailboxAdapter();
+        binding.mailboxRecyclerView.setAdapter(mailboxAdapter);
+
         //TODO: Pull data from firebase and properly display messages
 
         binding.buttonLogout.setOnClickListener(new View.OnClickListener() {

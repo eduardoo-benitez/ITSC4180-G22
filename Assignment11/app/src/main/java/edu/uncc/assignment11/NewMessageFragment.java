@@ -10,10 +10,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import edu.uncc.assignment11.databinding.FragmentMailboxBinding;
 import edu.uncc.assignment11.databinding.FragmentNewMessageBinding;
 
 public class NewMessageFragment extends Fragment {
@@ -37,9 +37,16 @@ public class NewMessageFragment extends Fragment {
         binding.nmSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Post message to Firebase
+                String title = binding.nmEditTextTitle.getText().toString();
+                String body = binding.nmEditTextText.getText().toString();
+                if (title.isEmpty() || body.isEmpty()) {
+                    Toast.makeText(getActivity(), "Missing input!!!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //TODO: Post message to Firebase
 
-                mListener.back();
+                    mListener.back();
+                }
             }
         });
 
