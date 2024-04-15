@@ -6,13 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".MailboxFragment">
 
-    <TextView android:id="@+id/mailboxTitle"
+    <TextView
+        android:id="@+id/mailboxTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="175dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="175dp"
+        android:layout_marginStart="145dp"
+        android:layout_marginTop="65dp"
+        android:layout_marginEnd="146dp"
+        android:layout_marginBottom="14dp"
         android:text="Mailbox"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/mailboxRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,30 +25,31 @@
         android:id="@+id/buttonNewMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginStart="15dp"
         android:text="New"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonUserList"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mailboxRecyclerView" />
+        app:layout_constraintTop_toTopOf="@+id/buttonUserList" />
 
     <Button
         android:id="@+id/buttonUserList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="80dp"
+        android:layout_marginEnd="7dp"
         android:text="User List"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mailboxRecyclerView" />
+        app:layout_constraintBottom_toBottomOf="@+id/buttonLogout"
+        app:layout_constraintEnd_toStartOf="@+id/buttonLogout"
+        app:layout_constraintTop_toTopOf="@+id/buttonLogout" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mailboxRecyclerView"
         android:layout_width="409dp"
         android:layout_height="483dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="14dp"
         android:layout_marginEnd="1dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mailboxTitle"
         tools:listitem="@layout/mailbox_row_item" />
@@ -53,10 +58,45 @@
         android:id="@+id/buttonLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="2dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="56dp"
         android:text="Logout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mailboxRecyclerView" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="15dp"
+        android:text="Search"
+        app:layout_constraintBottom_toBottomOf="@+id/textInputEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textInputEditText"
+        app:layout_constraintTop_toTopOf="@+id/textInputEditText" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="123dp">
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/textInputEditText"
+        android:layout_width="282dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="7dp"
+        android:hint="hint"
+        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

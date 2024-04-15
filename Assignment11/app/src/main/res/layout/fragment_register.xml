@@ -14,6 +14,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="175dp"
         android:text="Register"
+        android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="100dp"
         android:ems="10"
         android:hint="Email"
@@ -38,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="100dp"
         android:ems="10"
         android:hint="Password"
@@ -61,15 +62,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/registerTitle" />
+
     <Button
         android:id="@+id/rSubmitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
+        android:layout_marginStart="88dp"
         android:layout_marginTop="40dp"
-        android:layout_marginEnd="160dp"
+        android:layout_marginEnd="25dp"
         android:text="Submit"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rCancelButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rEditTextPassword" />
 
@@ -77,14 +79,13 @@
         android:id="@+id/rCancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="40dp"
-        android:layout_marginEnd="160dp"
+        android:layout_marginEnd="88dp"
         android:text="Cancel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rSubmitButton" />
+        app:layout_constraintStart_toEndOf="@+id/rSubmitButton"
+        app:layout_constraintTop_toBottomOf="@+id/rEditTextPassword" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
