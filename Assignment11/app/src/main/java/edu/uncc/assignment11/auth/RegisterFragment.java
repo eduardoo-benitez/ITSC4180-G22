@@ -16,11 +16,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.checkerframework.checker.units.qual.N;
 
-import edu.uncc.assignment11.R;
-import edu.uncc.assignment11.databinding.FragmentLoginBinding;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import edu.uncc.assignment11.databinding.FragmentRegisterBinding;
 
 public class RegisterFragment extends Fragment {
@@ -73,6 +75,25 @@ public class RegisterFragment extends Fragment {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
+
+                                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                                DocumentReference docRef = db.collection("users").document();
+
+                                                HashMap<String, Object> data = new HashMap<>();
+                                                data.put("docId", docRef.getId());
+                                                data.put("userId", mAuth.getCurrentUser().getUid());
+                                                data.put("name", name);
+                                                data.put("email", email);
+                                                data.put("blocked", new ArrayList<String>());
+                                                docRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+
+                                                        }
+                                                    }
+                                                });
+
                                                 Toast.makeText(getActivity(), "Account created successfully!", Toast.LENGTH_SHORT).show();
                                                 mListener.authCompleted();
                                             } else {
