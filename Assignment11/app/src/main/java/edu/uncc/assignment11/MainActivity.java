@@ -77,14 +77,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void goToReply() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.containerView, new ReplyFragment())
-                .addToBackStack(null)
-                .commit();
-    }
-
-    @Override
     public void back() {
         getSupportFragmentManager().popBackStack();
     }

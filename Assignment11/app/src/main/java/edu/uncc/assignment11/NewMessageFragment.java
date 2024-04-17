@@ -109,9 +109,6 @@ public class NewMessageFragment extends Fragment {
                                                                     });
                                                                 }
                                                             });
-                                                            recipientDef.set(data);
-                                                            recipientDef.update("docId", recipientDef.getId());
-                                                            mListener.back();
                                                         }
                                                         else {
                                                             Toast.makeText(getActivity(), "Recipient email blocked/not found!!!", Toast.LENGTH_SHORT).show();

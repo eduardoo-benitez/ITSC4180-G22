@@ -56,6 +56,8 @@ public class MailboxFragment extends Fragment {
     User mUser;
     MailboxAdapter mailboxAdapter;
     ArrayList<Message> mMessages = new ArrayList<>();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    ListenerRegistration listenerRegistration;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -64,7 +66,7 @@ public class MailboxFragment extends Fragment {
         mailboxAdapter = new MailboxAdapter();
         binding.mailboxRecyclerView.setAdapter(mailboxAdapter);
         mMessages.clear();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         db.collection("users")
                 .whereEqualTo("userId", mAuth.getCurrentUser().getUid())
                 .get()
@@ -103,16 +105,13 @@ public class MailboxFragment extends Fragment {
         getActivity().setTitle("MailboxFragment");
     }
 
-    ListenerRegistration listenerRegistration;
     void display() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         listenerRegistration = db.collection("users").document(mUser.getDocId()).collection("messages").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 mMessages.clear();
                 for (QueryDocumentSnapshot document: value) {
                     Message message = document.toObject(Message.class);
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
                     db.collection("users")
                             .whereEqualTo("email", message.getSender())
                             .get()
@@ -123,7 +122,6 @@ public class MailboxFragment extends Fragment {
                                             User user = document.toObject(User.class);
                                             if (!(mUser.getBlocked().contains(user.getUserId()))) {
                                                 mMessages.add(message);
-                                                Log.d("whateveryourtagis", mMessages.toString());
                                             }
                                         }
                                         mailboxAdapter.notifyDataSetChanged();
@@ -139,6 +137,7 @@ public class MailboxFragment extends Fragment {
         super.onDestroyView();
         if (listenerRegistration != null) {
             listenerRegistration.remove();
+            mMessages.clear();
         }
     }
     MailboxListener mListener;
@@ -157,9 +156,9 @@ public class MailboxFragment extends Fragment {
         void logout();
         void goToNewMessage();
         void goToUserList();
-        void goToReply();
     }
 
+    User recipient = new User();
     class MailboxAdapter extends RecyclerView.Adapter<MailboxAdapter.MailboxViewHolder> {
         @NonNull
         @Override
@@ -189,20 +188,17 @@ public class MailboxFragment extends Fragment {
 
             public void setupUI(Message message) {
                 mMessage = message;
+                mBinding.getRoot().setBackgroundColor(Color.WHITE);
+
                 mBinding.textViewMessageTitle.setText(message.getTitle());
                 mBinding.textViewMessageBody.setText("Please Click to Open!");
                 mBinding.textViewMessageReciever.setText(message.getRecipient());
                 mBinding.textViewMessageSender.setText(message.getSender());
+
                 if (mMessage.isRead()) {
-                    //has been read
                     mBinding.getRoot().setBackgroundColor(Color.LTGRAY);
                     mBinding.textViewMessageBody.setText(message.getBody());
                 }
-                else {
-                    mBinding.getRoot().setBackgroundColor(Color.WHITE);
-                }
-
-
                 if (mMessage.getSentAt() == null) {
                     mBinding.textViewDate.setText("N/A");
                 } else {
@@ -213,47 +209,76 @@ public class MailboxFragment extends Fragment {
                 mBinding.textViewMessageBody.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
                         db.collection("users").document(mUser.getDocId()).collection("messages").document(mMessage.getDocId()).update("read", true);
-
                     }
                 });
                 mBinding.replyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String body = mBinding.insertReply.getText().toString();
-                        if (!(body.isEmpty())){
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            DocumentReference bodyReply = db.collection("users").document(mUser.getDocId()).collection("messages").document();
-                            HashMap<String, Object> data = new HashMap<>();
-                            data.put("body", body);
-                            data.put("title", "re: "  + message.getTitle());
-                            data.put("sender", message.getRecipient());
-                            data.put("docId", message.getDocId());
-                            data.put("sentAt", FieldValue.serverTimestamp());
-                            data.put("recipient", message.getSender());
-                            data.put("read", message.isRead());
+                        if (!(body.isEmpty())) {
+                            db.collection("users")
+                                    .whereEqualTo("email", mMessage.getSender())
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                    recipient = document.toObject(User.class);
+                                                }
+                                                if (mUser.getUserId().equals(recipient.getUserId())) {
+                                                    Toast.makeText(getActivity(), "Do not reply to yourself!!!", Toast.LENGTH_SHORT).show();
+                                                }
+                                                else {
+                                                    DocumentReference senderRef = db.collection("users").document(mUser.getDocId()).collection("messages").document();
+                                                    DocumentReference recipientRef = db.collection("users").document(recipient.getDocId()).collection("messages").document();
 
-                            bodyReply.set(data);
+                                                    HashMap<String, Object> data = new HashMap<>();
+                                                    data.put("body", body);
+                                                    data.put("title", "re: " + message.getTitle());
+                                                    data.put("sender", mUser.getEmail());
+                                                    data.put("docId", senderRef.getId());
+                                                    data.put("sentAt", FieldValue.serverTimestamp());
+                                                    data.put("recipient", message.getSender());
+                                                    data.put("read", false);
+
+                                                    senderRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            recipientRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    recipientRef.update("docId", recipientRef.getId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                            mBinding.insertReply.setText("");
+                                                                        }
+                                                                    });
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    });
                         }
                         else {
                             Toast.makeText(getActivity(), "Please fill in a reply!!!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-
-                    mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            db.collection("users").document(mUser.getDocId()).collection("messages").document(mMessage.getDocId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    mailboxAdapter.notifyDataSetChanged();
-                                }
-                            });
-                        }
-                    });
+                mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        db.collection("users").document(mUser.getDocId()).collection("messages").document(mMessage.getDocId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                mailboxAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                });
             }
         }
     }
