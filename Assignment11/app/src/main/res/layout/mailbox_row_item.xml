@@ -49,6 +49,7 @@
             android:layout_marginTop="10dp"
             android:text="TextView"
             app:layout_constraintTop_toBottomOf="@+id/textViewMessageSender"
+            tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="0dp" />
 
         <TextView
@@ -71,25 +72,31 @@
             app:layout_constraintStart_toEndOf="@+id/textViewMessageSender"
             app:layout_constraintTop_toBottomOf="@+id/textViewMessageBody" />
 
-        <TextView
-            android:id="@+id/textViewDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="28dp"
-            android:text="DELETE"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textViewReply" />
+        <ImageButton
+            android:id="@+id/imageViewDelete"
+            android:layout_width="59dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="228dp"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="#00FFFFFF"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toStartOf="@+id/replyButton"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewMessageBody"
+            app:srcCompat="@drawable/ic_trash" />
 
-        <TextView
-            android:id="@+id/textViewReply"
+        <Button
+            android:id="@+id/replyButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="28dp"
-            android:text="REPLY"
+            android:layout_marginBottom="13dp"
+            android:text="Reply"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewMessageBody" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -79,7 +79,7 @@ public class NewMessageFragment extends Fragment {
                                                                 count++;
                                                             }
                                                         }
-                                                        if (count == 1 && !(sender.getBlocked().contains(recipient.getUserId())) && !(recipient.getBlocked().contains(sender.getUserId()))) {
+                                                        if (count == 1 && !(sender.getUserId()).equals(recipient.getUserId()) && !(recipient.getBlocked().contains(sender.getUserId()))) {
                                                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                                                             DocumentReference senderRef = db.collection("users").document(sender.getDocId()).collection("messages").document();
                                                             DocumentReference recipientDef = db.collection("users").document(recipient.getDocId()).collection("messages").document();
@@ -92,7 +92,22 @@ public class NewMessageFragment extends Fragment {
                                                             data.put("sender", sender.getEmail());
                                                             data.put("recipient", recipient.getEmail());
 
-                                                            senderRef.set(data);
+                                                            senderRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    recipientDef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                            recipientDef.update("docId", recipientDef.getId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                                    mListener.back();
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    });
+                                                                }
+                                                            });
                                                             recipientDef.set(data);
                                                             recipientDef.update("docId", recipientDef.getId());
                                                             mListener.back();

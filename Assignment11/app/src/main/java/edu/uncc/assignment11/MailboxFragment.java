@@ -58,7 +58,7 @@ public class MailboxFragment extends Fragment {
         binding.mailboxRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mailboxAdapter = new MailboxAdapter();
         binding.mailboxRecyclerView.setAdapter(mailboxAdapter);
-
+        mMessages.clear();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
                 .whereEqualTo("userId", mAuth.getCurrentUser().getUid())
@@ -120,15 +120,21 @@ public class MailboxFragment extends Fragment {
                                                 mMessages.add(message);
                                             }
                                         }
+                                        mailboxAdapter.notifyDataSetChanged();
                                     }
-                                    mailboxAdapter.notifyDataSetChanged();
                                 }
                             });
                 }
             }
         });
     }
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (listenerRegistration != null) {
+            listenerRegistration.remove();
+        }
+    }
     MailboxListener mListener;
     @Override
     public void onAttach(@NonNull Context context) {
@@ -190,20 +196,27 @@ public class MailboxFragment extends Fragment {
                     mBinding.textViewDate.setText(sdf.format(date));
                 }
 
-                mBinding.textViewReply.setOnClickListener(new View.OnClickListener() {
+                mBinding.replyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mListener.goToReply();
                     }
                 });
 
-                mBinding.textViewDelete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO: Delete message from firebase & update recyclerView
+                if (mAuth.getCurrentUser().getUid().equals(message.getSender())) {
+                    mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("messages").document(mMessage.getDocId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
 
-                    }
-                });
+                                }
+                            });
+                        }
+                    });
+                }
             }
         }
     }
