@@ -81,6 +81,54 @@ public class MailboxFragment extends Fragment {
                     }
                 });
 
+        binding.buttonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String search = binding.searchEditText.getText().toString();
+                Log.d("A11q", search);
+                if (search.isEmpty()) {
+                    Toast.makeText(getActivity(), "Please enter a search!!!", Toast.LENGTH_SHORT).show();
+                    mMessages.clear();
+                    db.collection("users").document(mUser.getDocId()).collection("messages")
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    for (QueryDocumentSnapshot document: task.getResult()) {
+                                        Message message = document.toObject(Message.class);
+                                        mMessages.add(message);
+                                    }
+                                    mailboxAdapter.notifyDataSetChanged();
+                                }
+                            });
+                }
+                else {
+                    mMessages.clear();
+                    char end = search.charAt(search.length() - 1);
+                    char newEnding = ++end;
+
+                    StringBuilder newString = new StringBuilder(search);
+                    newString.deleteCharAt(search.length() - 1);
+                    newString.append(newEnding);
+
+                    db.collection("users").document(mUser.getDocId()).collection("messages")
+                            .whereGreaterThanOrEqualTo("title", search)
+                            .whereLessThan("title", newString.toString())
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    for (QueryDocumentSnapshot document: task.getResult()) {
+                                        Message message = document.toObject(Message.class);
+                                        mMessages.add(message);
+                                    }
+                                    mailboxAdapter.notifyDataSetChanged();
+                                }
+                            });
+                }
+            }
+        });
+
         binding.buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
