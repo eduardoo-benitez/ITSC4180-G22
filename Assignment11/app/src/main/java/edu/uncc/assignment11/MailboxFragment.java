@@ -203,12 +203,11 @@ public class MailboxFragment extends Fragment {
                     }
                 });
 
-                if (mAuth.getCurrentUser().getUid().equals(message.getSender())) {
                     mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
-                            db.collection("messages").document(mMessage.getDocId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            db.collection("users").document(mUser.getDocId()).collection("messages").document(mMessage.getDocId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
 
@@ -216,7 +215,6 @@ public class MailboxFragment extends Fragment {
                             });
                         }
                     });
-                }
             }
         }
     }
