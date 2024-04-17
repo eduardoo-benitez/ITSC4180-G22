@@ -40,8 +40,6 @@ public class ReplyFragment extends Fragment {
         binding = FragmentReplyBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
-    User sender, recipient;
-    Message message;
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -49,10 +47,6 @@ public class ReplyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String body = binding.reEditTextText.getText().toString();
-                //Set the title to the replying message title
-                String title = binding.textViewTitle.getText().toString();
-                //Set the sender name to the person you are replying to
-                String senders = binding.textViewSender.getText().toString();
 
                 if (body.isEmpty()) {
                     Toast.makeText(getActivity(), "Missing input!!!", Toast.LENGTH_SHORT).show();

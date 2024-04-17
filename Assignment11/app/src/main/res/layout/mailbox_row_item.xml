@@ -76,13 +76,11 @@
             android:id="@+id/imageViewDelete"
             android:layout_width="59dp"
             android:layout_height="56dp"
-            android:layout_marginStart="228dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="4dp"
             android:backgroundTint="#00FFFFFF"
             android:scaleType="fitCenter"
-            app:layout_constraintEnd_toStartOf="@+id/replyButton"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textViewMessageReciever"
             app:layout_constraintTop_toBottomOf="@+id/textViewMessageBody"
             app:srcCompat="@drawable/ic_trash" />
 
@@ -90,12 +88,34 @@
             android:id="@+id/replyButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="13dp"
             android:text="Reply"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/insertReply"
+            app:layout_constraintTop_toBottomOf="@+id/textViewMessageBody"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="94dp"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="208dp"
+            tools:layout_editor_absoluteY="156dp">
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/insertReply"
+            android:layout_width="94dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="2dp"
+            android:hint="reply"
+            app:layout_constraintEnd_toStartOf="@+id/replyButton"
+            app:layout_constraintStart_toEndOf="@+id/imageViewDelete"
             app:layout_constraintTop_toBottomOf="@+id/textViewMessageBody" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

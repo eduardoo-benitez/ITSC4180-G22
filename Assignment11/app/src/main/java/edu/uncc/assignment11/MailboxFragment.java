@@ -13,11 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -27,6 +30,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import edu.uncc.assignment11.databinding.FragmentMailboxBinding;
 import edu.uncc.assignment11.databinding.MailboxRowItemBinding;
@@ -101,7 +105,6 @@ public class MailboxFragment extends Fragment {
     ListenerRegistration listenerRegistration;
     void display() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Log.d("TAG", "display: WAKWAKAKWKAKWKKAKA");
         listenerRegistration = db.collection("users").document(mUser.getDocId()).collection("messages").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -201,7 +204,23 @@ public class MailboxFragment extends Fragment {
                 mBinding.replyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.goToReply();
+                        String body = mBinding.insertReply.getText().toString();
+                        if(body != null) {
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            DocumentReference bodyReply = db.collection("users").document(mUser.getDocId()).collection("messages").document();
+                            HashMap<String, Object> data = new HashMap<>();
+                            data.put("body", body);
+                            data.put("title", "re: "  + message.getTitle());
+                            data.put("sender", message.getRecipient());
+                            data.put("docId", message.getDocId());
+                            data.put("sentAt", FieldValue.serverTimestamp());
+                            data.put("recipient", message.getSender());
+
+                            bodyReply.set(data);
+                        }
+                        else {
+                            Toast.makeText(getActivity(), "Please fill in a reply!!!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
