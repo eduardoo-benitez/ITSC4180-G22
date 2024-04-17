@@ -101,6 +101,7 @@ public class MailboxFragment extends Fragment {
     ListenerRegistration listenerRegistration;
     void display() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Log.d("TAG", "display: WAKWAKAKWKAKWKKAKA");
         listenerRegistration = db.collection("users").document(mUser.getDocId()).collection("messages").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -118,6 +119,7 @@ public class MailboxFragment extends Fragment {
                                             User user = document.toObject(User.class);
                                             if (!(mUser.getBlocked().contains(user.getUserId()))) {
                                                 mMessages.add(message);
+                                                Log.d("whateveryourtagis", mMessages.toString());
                                             }
                                         }
                                         mailboxAdapter.notifyDataSetChanged();
@@ -210,7 +212,7 @@ public class MailboxFragment extends Fragment {
                             db.collection("users").document(mUser.getDocId()).collection("messages").document(mMessage.getDocId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-
+                                    mailboxAdapter.notifyDataSetChanged();
                                 }
                             });
                         }
