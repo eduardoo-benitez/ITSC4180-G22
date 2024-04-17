@@ -5,6 +5,15 @@ import com.google.firebase.Timestamp;
 public class Message {
     String docId, title, body, sender, recipient;
     Timestamp sentAt;
+    boolean read = false;
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
+    }
 
     public String getDocId() {
         return docId;
@@ -61,8 +70,9 @@ public class Message {
                 ", title='" + title + '\'' +
                 ", body='" + body + '\'' +
                 ", sender='" + sender + '\'' +
-                ", reciever='" + recipient + '\'' +
+                ", recipient='" + recipient + '\'' +
                 ", sentAt=" + sentAt +
+                ", read=" + read +
                 '}';
     }
 }

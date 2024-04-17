@@ -1,6 +1,7 @@
 package edu.uncc.assignment11;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -189,9 +190,18 @@ public class MailboxFragment extends Fragment {
             public void setupUI(Message message) {
                 mMessage = message;
                 mBinding.textViewMessageTitle.setText(message.getTitle());
-                mBinding.textViewMessageBody.setText(message.getBody());
+                mBinding.textViewMessageBody.setText("Please Click to Open!");
                 mBinding.textViewMessageReciever.setText(message.getRecipient());
                 mBinding.textViewMessageSender.setText(message.getSender());
+                if (mMessage.isRead()) {
+                    //has been read
+                    mBinding.getRoot().setBackgroundColor(Color.LTGRAY);
+                    mBinding.textViewMessageBody.setText(message.getBody());
+                }
+                else {
+                    mBinding.getRoot().setBackgroundColor(Color.WHITE);
+                }
+
 
                 if (mMessage.getSentAt() == null) {
                     mBinding.textViewDate.setText("N/A");
@@ -200,12 +210,19 @@ public class MailboxFragment extends Fragment {
                     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
                     mBinding.textViewDate.setText(sdf.format(date));
                 }
+                mBinding.textViewMessageBody.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        db.collection("users").document(mUser.getDocId()).collection("messages").document(mMessage.getDocId()).update("read", true);
 
+                    }
+                });
                 mBinding.replyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String body = mBinding.insertReply.getText().toString();
-                        if(body != null) {
+                        if (!(body.isEmpty())){
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
                             DocumentReference bodyReply = db.collection("users").document(mUser.getDocId()).collection("messages").document();
                             HashMap<String, Object> data = new HashMap<>();
@@ -215,6 +232,7 @@ public class MailboxFragment extends Fragment {
                             data.put("docId", message.getDocId());
                             data.put("sentAt", FieldValue.serverTimestamp());
                             data.put("recipient", message.getSender());
+                            data.put("read", message.isRead());
 
                             bodyReply.set(data);
                         }

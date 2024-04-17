@@ -91,6 +91,7 @@ public class NewMessageFragment extends Fragment {
                                                             data.put("sentAt", FieldValue.serverTimestamp());
                                                             data.put("sender", sender.getEmail());
                                                             data.put("recipient", recipient.getEmail());
+                                                            data.put("read", false);
 
                                                             senderRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
