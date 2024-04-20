@@ -2,18 +2,13 @@ package edu.uncc.assignment11.models;
 
 import com.google.firebase.Timestamp;
 
+import java.util.ArrayList;
+
 public class Message {
-    String docId, title, body, sender, recipient;
+    String docId, otherDocId, title, body, sender, recipient;
     Timestamp sentAt;
     boolean read = false;
-
-    public boolean isRead() {
-        return read;
-    }
-
-    public void setRead(boolean read) {
-        this.read = read;
-    }
+    ArrayList<String> titleArr;
 
     public String getDocId() {
         return docId;
@@ -21,6 +16,14 @@ public class Message {
 
     public void setDocId(String docId) {
         this.docId = docId;
+    }
+
+    public String getOtherDocId() {
+        return otherDocId;
+    }
+
+    public void setOtherDocId(String otherDocId) {
+        this.otherDocId = otherDocId;
     }
 
     public String getTitle() {
@@ -63,16 +66,34 @@ public class Message {
         this.sentAt = sentAt;
     }
 
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
+    }
+
+    public ArrayList<String> getTitleArr() {
+        return titleArr;
+    }
+
+    public void setTitleArr(ArrayList<String> titleArr) {
+        this.titleArr = titleArr;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
                 "docId='" + docId + '\'' +
+                ", otherDocId='" + otherDocId + '\'' +
                 ", title='" + title + '\'' +
                 ", body='" + body + '\'' +
                 ", sender='" + sender + '\'' +
                 ", recipient='" + recipient + '\'' +
                 ", sentAt=" + sentAt +
                 ", read=" + read +
+                ", titleArr=" + titleArr +
                 '}';
     }
 }

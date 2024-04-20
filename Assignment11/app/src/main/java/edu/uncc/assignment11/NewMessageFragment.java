@@ -22,7 +22,11 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import edu.uncc.assignment11.databinding.FragmentNewMessageBinding;
 import edu.uncc.assignment11.models.User;
@@ -92,6 +96,14 @@ public class NewMessageFragment extends Fragment {
                                                             data.put("sender", sender.getEmail());
                                                             data.put("recipient", recipient.getEmail());
                                                             data.put("read", false);
+                                                            data.put("otherDocId", recipientDef.getId());
+
+                                                            ArrayList<String> titleArr = new ArrayList<>();
+                                                            for (int i = 0; i < title.length(); i++) {
+                                                                int j = 0;
+                                                                titleArr.add(title.substring(j, i+1));
+                                                            }
+                                                            data.put("titleArr", titleArr);
 
                                                             senderRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
@@ -99,7 +111,7 @@ public class NewMessageFragment extends Fragment {
                                                                     recipientDef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                         @Override
                                                                         public void onComplete(@NonNull Task<Void> task) {
-                                                                            recipientDef.update("docId", recipientDef.getId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                            recipientDef.update("docId", recipientDef.getId(), "otherDocId", senderRef.getId()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                                 @Override
                                                                                 public void onComplete(@NonNull Task<Void> task) {
                                                                                     mListener.back();

@@ -28,10 +28,15 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import edu.uncc.assignment11.databinding.FragmentMailboxBinding;
 import edu.uncc.assignment11.databinding.MailboxRowItemBinding;
@@ -65,7 +70,9 @@ public class MailboxFragment extends Fragment {
         binding.mailboxRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mailboxAdapter = new MailboxAdapter();
         binding.mailboxRecyclerView.setAdapter(mailboxAdapter);
+
         mMessages.clear();
+        mailboxAdapter.notifyDataSetChanged();
 
         db.collection("users")
                 .whereEqualTo("userId", mAuth.getCurrentUser().getUid())
@@ -85,7 +92,6 @@ public class MailboxFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String search = binding.searchEditText.getText().toString();
-                Log.d("A11q", search);
                 if (search.isEmpty()) {
                     Toast.makeText(getActivity(), "Please enter a search!!!", Toast.LENGTH_SHORT).show();
                     mMessages.clear();
@@ -104,16 +110,8 @@ public class MailboxFragment extends Fragment {
                 }
                 else {
                     mMessages.clear();
-                    char end = search.charAt(search.length() - 1);
-                    char newEnding = ++end;
-
-                    StringBuilder newString = new StringBuilder(search);
-                    newString.deleteCharAt(search.length() - 1);
-                    newString.append(newEnding);
-
                     db.collection("users").document(mUser.getDocId()).collection("messages")
-                            .whereGreaterThanOrEqualTo("title", search)
-                            .whereLessThan("title", newString.toString())
+                            .whereArrayContains("titleArr", search)
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
@@ -207,6 +205,7 @@ public class MailboxFragment extends Fragment {
     }
 
     User recipient = new User();
+    User sender = new User();
     class MailboxAdapter extends RecyclerView.Adapter<MailboxAdapter.MailboxViewHolder> {
         @NonNull
         @Override
@@ -239,14 +238,14 @@ public class MailboxFragment extends Fragment {
                 mBinding.getRoot().setBackgroundColor(Color.WHITE);
 
                 mBinding.textViewMessageTitle.setText(message.getTitle());
-                mBinding.textViewMessageBody.setText("Please Click to Open!");
+                mBinding.textViewMessageBody.setText(message.getBody());
                 mBinding.textViewMessageReciever.setText(message.getRecipient());
                 mBinding.textViewMessageSender.setText(message.getSender());
 
                 if (mMessage.isRead()) {
                     mBinding.getRoot().setBackgroundColor(Color.LTGRAY);
-                    mBinding.textViewMessageBody.setText(message.getBody());
                 }
+
                 if (mMessage.getSentAt() == null) {
                     mBinding.textViewDate.setText("N/A");
                 } else {
@@ -257,7 +256,21 @@ public class MailboxFragment extends Fragment {
                 mBinding.textViewMessageBody.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        db.collection("users").document(mUser.getDocId()).collection("messages").document(mMessage.getDocId()).update("read", true);
+                        db.collection("users")
+                                .whereEqualTo("email", mMessage.getSender())
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                sender = document.toObject(User.class);
+                                            }
+                                            if (!(sender.getUserId().equals(mUser.getUserId()))) {
+                                                db.collection("users").document(sender.getDocId()).collection("messages").document(mMessage.getOtherDocId()).update("read", true);
+                                            }
+                                        }
+                                    }
+                                });
                     }
                 });
                 mBinding.replyButton.setOnClickListener(new View.OnClickListener() {
@@ -289,6 +302,14 @@ public class MailboxFragment extends Fragment {
                                                     data.put("sentAt", FieldValue.serverTimestamp());
                                                     data.put("recipient", message.getSender());
                                                     data.put("read", false);
+                                                    data.put("otherDocId", recipientRef.getId());
+
+                                                    ArrayList<String> titleArr = new ArrayList<>();
+                                                    for (int i = 0; i < message.getTitle().length(); i++) {
+                                                        int j = 0;
+                                                        titleArr.add(message.getTitle().substring(j, i+1));
+                                                    }
+                                                    data.put("titleArr", titleArr);
 
                                                     senderRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
@@ -296,7 +317,7 @@ public class MailboxFragment extends Fragment {
                                                             recipientRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
                                                                 public void onComplete(@NonNull Task<Void> task) {
-                                                                    recipientRef.update("docId", recipientRef.getId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                    recipientRef.update("docId", recipientRef.getId(), "otherDocId", message.getOtherDocId()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                         @Override
                                                                         public void onComplete(@NonNull Task<Void> task) {
                                                                             mBinding.insertReply.setText("");
