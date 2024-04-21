@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.AddLogFragment">
+
+    <TextView
+        android:id="@+id/textViewAddLogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="170dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="170dp"
+        android:text="ADD LOG"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewAddDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="50dp"
+        android:text="Date/Time: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAddLogTitle" />
+
+    <TextView
+        android:id="@+id/textViewAddHoursSlept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="50dp"
+        android:text="Hours Slept: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAddDateTime" />
+
+    <TextView
+        android:id="@+id/textViewAddSleepQuality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="50dp"
+        android:text="Sleep Quality: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAddHoursSlept" />
+
+    <TextView
+        android:id="@+id/textViewAddHoursExercised"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="50dp"
+        android:text="Hours Exercised: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAddSleepQuality" />
+
+    <TextView
+        android:id="@+id/textViewAddWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="50dp"
+        android:text="Weight: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAddHoursExercised" />
+
+    <Button
+        android:id="@+id/buttonAddDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:text="Add"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewAddDateTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewAddDateTime" />
+
+    <Button
+        android:id="@+id/buttonAddHoursSlept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:text="Add"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewAddHoursSlept"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewAddHoursSlept" />
+
+    <Button
+        android:id="@+id/buttonAddSleepQuality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:text="Add"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewAddSleepQuality"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewAddSleepQuality" />
+
+    <Button
+        android:id="@+id/buttonAddHoursExercised"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:text="Add"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewAddHoursExercised"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewAddHoursExercised" />
+
+    <EditText
+        android:id="@+id/editTextAddWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:ems="10"
+        android:hint="Weight"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewAddWeight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textViewAddWeight" />
+
+    <Button
+        android:id="@+id/buttonAddSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="30dp"
+        android:text="Submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewNewDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="N/A"
+        app:layout_constraintEnd_toStartOf="@+id/buttonAddDateTime"
+        app:layout_constraintStart_toEndOf="@+id/textViewAddDateTime"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAddLogTitle" />
+
+    <TextView
+        android:id="@+id/textViewNewHoursSlept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="N/A"
+        app:layout_constraintEnd_toStartOf="@+id/buttonAddHoursSlept"
+        app:layout_constraintStart_toEndOf="@+id/textViewAddHoursSlept"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNewDateTime" />
+
+    <TextView
+        android:id="@+id/textViewNewSleepQuality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="N/A"
+        app:layout_constraintEnd_toStartOf="@+id/buttonAddSleepQuality"
+        app:layout_constraintStart_toEndOf="@+id/textViewAddSleepQuality"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNewHoursSlept" />
+
+    <TextView
+        android:id="@+id/textViewNewHoursExercised"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="N/A"
+        app:layout_constraintEnd_toStartOf="@+id/buttonAddHoursExercised"
+        app:layout_constraintStart_toEndOf="@+id/textViewAddHoursExercised"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNewSleepQuality" />
+
+    <TextView
+        android:id="@+id/textViewNewWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="N/A"
+        app:layout_constraintEnd_toStartOf="@+id/editTextAddWeight"
+        app:layout_constraintStart_toEndOf="@+id/textViewAddWeight"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNewHoursExercised" />
+
+    <Button
+        android:id="@+id/buttonAddCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginBottom="30dp"
+        android:text="Cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
