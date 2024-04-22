@@ -32,6 +32,8 @@ public class SleepQualityFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("SleepQualityFragment");
 
+        //TODO: Somehow display the sleep quality options and pass the result back to the AddLogFragment (by going through the MainActivity first). Could be another listview or some radio buttons in a group?
+
         binding.buttonSleepQualityCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,6 +41,7 @@ public class SleepQualityFragment extends Fragment {
             }
         });
 
+        //TODO: Replace with a submit on listview option selection if that is used.
         binding.buttonSleepQualitySubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +64,6 @@ public class SleepQualityFragment extends Fragment {
 
     public interface SleepQualityListener {
         void back();
-        void selectedSleepQuality();
+        void selectedSleepQuality(int sleepQuality);
     }
 }

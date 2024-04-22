@@ -15,6 +15,8 @@ import edu.uncc.assignment12.databinding.FragmentVisualizeBinding;
 
 public class VisualizeFragment extends Fragment {
 
+    //TODO: I have no idea. We will figure it out tho, trust.
+
     public VisualizeFragment() {
         // Required empty public constructor
     }
@@ -31,8 +33,6 @@ public class VisualizeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("VisualizeFragment");
-
-
 
         binding.buttonVisualizeCancel.setOnClickListener(new View.OnClickListener() {
             @Override

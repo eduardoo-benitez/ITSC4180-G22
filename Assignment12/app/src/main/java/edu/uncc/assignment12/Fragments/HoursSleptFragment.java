@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import edu.uncc.assignment12.databinding.FragmentHoursSleptBinding;
 
@@ -32,17 +33,20 @@ public class HoursSleptFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("HoursSleptFragment");
 
+        //TODO: Make an adapter and set the listview to an array containing the options for hours slept.
+
+        binding.listViewHoursSlept.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO: On selection of an item, pass the corresponding value back to the MainActivity.
+
+            }
+        });
+
         binding.buttonHoursSleptCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.back();
-            }
-        });
-
-        binding.buttonHoursSleptSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
     }
@@ -61,6 +65,6 @@ public class HoursSleptFragment extends Fragment {
 
     public interface HoursSleptListener {
         void back();
-        void selectedHoursSlept();
+        void selectedHoursSlept(double hoursSlept);
     }
 }

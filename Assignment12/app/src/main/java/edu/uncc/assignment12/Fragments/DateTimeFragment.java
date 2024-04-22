@@ -15,6 +15,8 @@ import edu.uncc.assignment12.databinding.FragmentDateTimeBinding;
 
 public class DateTimeFragment extends Fragment {
 
+    //This entire fragment will most likely need to be replaced with a DiagFragment.
+
     public DateTimeFragment() {
         // Required empty public constructor
     }

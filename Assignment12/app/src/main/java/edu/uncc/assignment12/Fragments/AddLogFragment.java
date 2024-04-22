@@ -11,9 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
+import edu.uncc.assignment12.Models.Log;
 import edu.uncc.assignment12.databinding.FragmentAddLogBinding;
 
 public class AddLogFragment extends Fragment {
+
+    private Log newLog;
+    //TODO: Add variables and corresponding setters for each field of a Log object
 
     public AddLogFragment() {
         // Required empty public constructor
@@ -70,6 +76,7 @@ public class AddLogFragment extends Fragment {
         binding.buttonAddSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: Take all the data in the TextViews/EditTextViews and make a Log object. Pass this new object back to the MainActivity. Make sure to check that each TextView is not empty.
 
             }
         });
@@ -92,6 +99,7 @@ public class AddLogFragment extends Fragment {
         void goToHoursSlept();
         void goToSleepQuality();
         void goToHoursExercised();
+        void addLog(Log log);
         void back();
     }
 }

@@ -25,6 +25,24 @@ public class LogsFragment extends Fragment {
         // Required empty public constructor
     }
 
+    private static final String ARG_LOGS= "LOGS";
+    private ArrayList<Log> mLogs;
+    public static LogsFragment newInstance(ArrayList<Log> mLogs) {
+        LogsFragment fragment = new LogsFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_LOGS, mLogs);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.mLogs = (ArrayList<Log>) getArguments().getSerializable(ARG_LOGS);
+        }
+    }
+
     FragmentLogsBinding binding;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,7 +52,6 @@ public class LogsFragment extends Fragment {
     }
 
     LogsAdapter logsAdapter;
-    ArrayList<Log> mLogs = new ArrayList<>();
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -43,8 +60,6 @@ public class LogsFragment extends Fragment {
         binding.logsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         logsAdapter = new LogsAdapter();
         binding.logsRecyclerView.setAdapter(logsAdapter);
-
-
 
         binding.buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +74,6 @@ public class LogsFragment extends Fragment {
                 mListener.goToVisualize();
             }
         });
-
     }
 
     LogsListener mListener;
@@ -111,11 +125,12 @@ public class LogsFragment extends Fragment {
             public void setupUI(Log log) {
                 mLog = log;
 
-
+                //TODO: Make recyclerview show each Log in the mLogs array.
 
                 mBinding.buttonDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //TODO: Delete an entry.
 
                     }
                 });
