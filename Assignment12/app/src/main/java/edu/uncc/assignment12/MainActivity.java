@@ -7,18 +7,19 @@ import android.os.Bundle;
 import java.util.ArrayList;
 
 import edu.uncc.assignment12.Fragments.AddLogFragment;
-import edu.uncc.assignment12.Fragments.DateTimeFragment;
+import edu.uncc.assignment12.Fragments.DatePickerFragment;
 import edu.uncc.assignment12.Fragments.HoursExercisedFragment;
 import edu.uncc.assignment12.Fragments.HoursSleptFragment;
 import edu.uncc.assignment12.Fragments.LogsFragment;
 import edu.uncc.assignment12.Fragments.SleepQualityFragment;
+import edu.uncc.assignment12.Fragments.TimePickerFragment;
 import edu.uncc.assignment12.Fragments.VisualizeFragment;
-import edu.uncc.assignment12.Models.Log;
+import edu.uncc.assignment12.Models.LogEntry;
 
-public class MainActivity extends AppCompatActivity implements LogsFragment.LogsListener, AddLogFragment.AddLogListener, VisualizeFragment.VisualizeListener, DateTimeFragment.DateTimeListener,
-        HoursSleptFragment.HoursSleptListener, SleepQualityFragment.SleepQualityListener, HoursExercisedFragment.HoursExercisedListener {
+public class MainActivity extends AppCompatActivity implements LogsFragment.LogsListener, AddLogFragment.AddLogListener, VisualizeFragment.VisualizeListener, DatePickerFragment.DatePickerListener,
+        TimePickerFragment.TimePickerListener, HoursSleptFragment.HoursSleptListener, SleepQualityFragment.SleepQualityListener, HoursExercisedFragment.HoursExercisedListener {
 
-    private ArrayList<Log> mLogs = new ArrayList<>();
+    private ArrayList<LogEntry> mLogEntries = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements LogsFragment.Logs
         setContentView(R.layout.activity_main);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.containerView, LogsFragment.newInstance(mLogs), "logs-tag")
+                .replace(R.id.containerView, LogsFragment.newInstance(mLogEntries), "logs-tag")
                 .addToBackStack(null)
                 .commit();
     }
@@ -49,10 +50,7 @@ public class MainActivity extends AppCompatActivity implements LogsFragment.Logs
 
     @Override
     public void goToDateTime() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.containerView, new DateTimeFragment())
-                .addToBackStack(null)
-                .commit();
+        new DatePickerFragment().show(getSupportFragmentManager(), "datePicker");
     }
 
     @Override
@@ -80,8 +78,8 @@ public class MainActivity extends AppCompatActivity implements LogsFragment.Logs
     }
 
     @Override
-    public void addLog(Log log) {
-        mLogs.add(log);
+    public void addLog(LogEntry logEntry) {
+        mLogEntries.add(logEntry);
         getSupportFragmentManager().popBackStack();
     }
 
@@ -105,10 +103,19 @@ public class MainActivity extends AppCompatActivity implements LogsFragment.Logs
         //TODO: Take the param and pass it into the corresponding setter in AddLogFragment
     }
 
-    //TODO: Figure out what dtype the date/time is
     @Override
-    public void selectedDateTime() {
-        //TODO: Take the param and pass it into the corresponding setter in AddLogFragment
+    public void selectedDate(String date) {
+        AddLogFragment addLogFragment = (AddLogFragment) getSupportFragmentManager().findFragmentByTag("add-log-tag");
+        if (addLogFragment != null) {
+            addLogFragment.setDate(date);
+        }
+    }
 
+    @Override
+    public void selectedTime(String time) {
+        AddLogFragment addLogFragment = (AddLogFragment) getSupportFragmentManager().findFragmentByTag("add-log-tag");
+        if (addLogFragment != null) {
+            addLogFragment.setTime(time);
+        }
     }
 }

@@ -11,15 +11,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
-import edu.uncc.assignment12.Models.Log;
+import edu.uncc.assignment12.Models.LogEntry;
 import edu.uncc.assignment12.databinding.FragmentAddLogBinding;
 
 public class AddLogFragment extends Fragment {
 
-    private Log newLog;
-    //TODO: Add variables and corresponding setters for each field of a Log object
+    private LogEntry newLogEntry;
+    //TODO: Add more variables for each field of a LogEntry object
+    private String date;
+    private String time;
+
+    public void setDate(String date) {
+        this.date = date;
+        binding.textViewNewDate.setText(this.date != null ? this.date: "N/A");
+    }
+    public void setTime(String time) {
+        this.time = time;
+        binding.textViewNewTime.setText(this.time != null ? this.time: "N/A");
+    }
+    //TODO: Add more setters for each field of a LogEntry object (NOTE: the line under this.time shouldn't be necessary for other fields, date/time is just weird)
 
     public AddLogFragment() {
         // Required empty public constructor
@@ -37,6 +47,9 @@ public class AddLogFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("AddLogFragment");
+
+        binding.textViewNewDate.setText(this.date != null ? this.date: "N/A");
+        binding.textViewNewTime.setText(this.time != null ? this.time: "N/A");
 
         binding.buttonAddDateTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +89,7 @@ public class AddLogFragment extends Fragment {
         binding.buttonAddSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Take all the data in the TextViews/EditTextViews and make a Log object. Pass this new object back to the MainActivity. Make sure to check that each TextView is not empty.
+                //TODO: Take all the data in the TextViews/EditTextViews and make a LogEntry object. Pass this new object back to the MainActivity. Make sure to check that each TextView is not empty.
 
             }
         });
@@ -99,7 +112,7 @@ public class AddLogFragment extends Fragment {
         void goToHoursSlept();
         void goToSleepQuality();
         void goToHoursExercised();
-        void addLog(Log log);
+        void addLog(LogEntry logEntry);
         void back();
     }
 }

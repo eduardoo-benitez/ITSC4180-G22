@@ -131,12 +131,13 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/textViewNewDateTime"
+        android:id="@+id/textViewNewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="36dp"
         android:text="N/A"
         app:layout_constraintEnd_toStartOf="@+id/buttonAddDateTime"
+        app:layout_constraintHorizontal_bias="0.542"
         app:layout_constraintStart_toEndOf="@+id/textViewAddDateTime"
         app:layout_constraintTop_toBottomOf="@+id/textViewAddLogTitle" />
 
@@ -144,11 +145,11 @@
         android:id="@+id/textViewNewHoursSlept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="35dp"
         android:text="N/A"
         app:layout_constraintEnd_toStartOf="@+id/buttonAddHoursSlept"
         app:layout_constraintStart_toEndOf="@+id/textViewAddHoursSlept"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNewDateTime" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewNewTime" />
 
     <TextView
         android:id="@+id/textViewNewSleepQuality"
@@ -189,5 +190,16 @@
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewNewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="N/A"
+        app:layout_constraintEnd_toStartOf="@+id/buttonAddDateTime"
+        app:layout_constraintHorizontal_bias="0.542"
+        app:layout_constraintStart_toEndOf="@+id/textViewAddDateTime"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNewDate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
