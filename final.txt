@@ -1,2 +1,3 @@
 most of this is using the local db which we skipped in assinment 12 and i didnt get to finish today. look at the stuff in week 15.
+Also, the shared prefrence stuff seems to be completely new to me I have no idea what or where we covered this.
 
